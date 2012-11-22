@@ -116,16 +116,30 @@ exports.findByType = function(req, res) {
 exports.updateLocation = function(req, res) {
     var id = req.params.id;
     var Location = req.body;
-    console.log('Updating Location: ' + id); 
+    console.log('Updating Location for userID: ' + id); 
     console.log(JSON.stringify(Location));
+    
+    //http://stackoverflow.com/questions/5892569/responding-a-json-object-in-nodejs
+    
+    var now = new Date();
+	var jsonDate = now.toJSON();
+
+	var info =  { 
+      "loc": Location.loc, 
+      "uptime": jsonDate, 
+    };
+  
+  	 console.log('current time: ' + jsonDate); 
+  	console.log(JSON.stringify(info));
+  	
     db.collection('accounts', function(err, collection) {
-        collection.update({'_id':new BSON.ObjectID(id)}, {$set: Location}, {safe:true}, function(err, result) {
+        collection.update({'_id':new BSON.ObjectID(id)}, {$set: info}, {safe:true}, function(err, result) {
             if (err) {
                 console.log('Error updating Location: ' + err);
                 res.send({'error':'An error has occurred'});
             } else {
                 console.log('' + result + ' document(s) updated');
-                res.send(Location);
+                res.send(info);
             }
         });
     });
@@ -140,14 +154,23 @@ exports.updateStatus = function(req, res) {
     var Status = req.body;
     console.log('Updating Location: ' + id); 
     console.log(JSON.stringify(Status));
+    
+    var now = new Date();
+	var jsonDate = now.toJSON();
+	
+    var info =  { 
+      "status": Status.status, 
+      "uptime": jsonDate, 
+    };
+    
     db.collection('accounts', function(err, collection) {
-        collection.update({'_id':new BSON.ObjectID(id)}, {$set: Status}, {safe:true}, function(err, result) {
+        collection.update({'_id':new BSON.ObjectID(id)}, {$set: info}, {safe:true}, function(err, result) {
             if (err) {
                 console.log('Error updating status: ' + err);
                 res.send({'error':'An error has occurred'});
             } else {
                 console.log('' + result + ' document(s) updated');
-                res.send(Status);
+                res.send(info);
             }
         });
     });
@@ -173,15 +196,28 @@ exports.findByDistance = function(req, res) {
 // Find the closed Users: return with distance
 // Input:
 //     	- location: {[lon,lat]}
+// 		- type: user type (Driver or User)
+// 		- number: number of record return
+// 		- status: status of user
 exports.findByDistance2 = function(req, res) {
     var Location = req.body;
+    var type = req.body.type;
+    var number = req.body.number;
+    var status = req.body.status;
     //var obj = JSON.parse(Location);
     console.log('Retrieving accounts by distance: ' + req.body);
     var point = [];
     point = req.body.loc
     console.log('Retrieving accounts by distance: ' + req.body.loc);
 
-    db.command({geoNear: 'accounts', near: req.body.loc, distanceMultiplier: 3963, spherical: true, num: 10}, function(e, reply) {
+    db.command({geoNear: 'accounts', near: req.body.loc, distanceMultiplier: 3963, spherical: true, num: number,
+    	query:{
+			$and:[
+					{"usertype":type},
+					{"status":status}
+				]
+			}
+		}, function(e, reply) {
 		if (e) { 
 			res.send("" + e); 
 		}
@@ -196,14 +232,24 @@ exports.findByDistance2 = function(req, res) {
 // Find the closed Users:
 // Input:
 //     	- id: user ID (in URL)
+// 		- type: user type (Driver or User)
+// 		- number: number of record return
 exports.findByDistanceWithAccountID = function(req, res) {
     var id = req.params.id;
+	var type = req.body.type;
+    var number = req.body.number;
     console.log('Retrieving accounts by distance: ' + id);
     db.collection('accounts', function(err, collection) {
     	collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, user) {
     		var point = user.loc;
     		console.log('Retrieving accounts by distance: ' + point);
-    		db.command({geoNear: 'accounts', near: user.loc, distanceMultiplier: 3963, spherical: true, num: 10}, function(e, reply) {
+    		db.command({geoNear: 'accounts', near: user.loc, distanceMultiplier: 3963, spherical: true, num: 10,
+    			query:{
+							$and:[
+								{"usertype":type}
+							]
+						}
+				}, function(e, reply) {
 				if (e) { 
 					res.send("" + e); 
 				}
@@ -225,10 +271,12 @@ exports.findByDistanceWithAccountID = function(req, res) {
 //     	- id: user ID (in URL)
 // 		- type: user type (Driver or User)
 // 		- number: number of record return
+// 		- status: status of user
 exports.findByDistanceWithAccountID2 = function(req, res) {
     var id = req.params.id;
     var type = req.body.type;
     var number = req.body.number;
+    var status = req.body.status;
     
     console.log('Retrieving accounts by distance: ' + id);
     db.collection('accounts', function(err, collection) {
@@ -238,7 +286,8 @@ exports.findByDistanceWithAccountID2 = function(req, res) {
     		db.command({geoNear: 'accounts', near: user.loc, distanceMultiplier: 3963, spherical: true, num: number, 
     					query:{
 							$and:[
-								{"usertype":type}
+								{"usertype":type},
+								{"status":status}
 							]
 						}
 				}, function(e, reply) {
