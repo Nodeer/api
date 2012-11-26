@@ -23,7 +23,7 @@ app.configure(function () {
 //LOCATION
 	//curl -i -X GET -H 'Content-Type: application/json' -d'{"loc" : [ 106.638966,10.827257 ] }' http://localhost:3001/locations/distance
 	app.get('/locations/distance', account.findByDistance2);
-	// curl -i -X GET -H 'Content-Type: application/json -d'{"loc" : [ 106.638966,10.827257],"type":"Driver","number":"10" }' http://localhost:3001/locations/distance/50a1be6e7028797132000001
+	// curl -i -X GET -H 'Content-Type: application/json' -d' {"loc" : [ 106.638966,10.827257],"type":"Driver","number":"10", "status":"1" }' http://localhost:3001/locations/distance/50a1be6e7028797132000001
 	app.get('/locations/distance/:id', account.findByDistanceWithAccountID2);
 
 //app.listen(3001);
