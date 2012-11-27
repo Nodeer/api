@@ -1,7 +1,8 @@
 var express = require('express'),
     account = require('./routes/account');
 
-var app = express();
+var app = express.createServer();
+//var app = express();
 
 app.configure(function () {
     app.use(express.logger('dev'));     /* 'default', 'short', 'tiny', 'dev' */
@@ -9,6 +10,10 @@ app.configure(function () {
 });
 
 // USER
+	//http://taxivnapi.rs.af.cm/accounts/signup
+	app.put('/accounts/signup', account.signUp);
+	//http://taxivnapi.rs.af.cm/accounts/login
+	app.get('/accounts/login', account.login);
 	//http://taxivnapi.rs.af.cm/accounts/
 	app.get('/accounts', account.findAll);
 	//http://taxivnapi.rs.af.cm/accounts/50a1be6e7028797132000001
@@ -27,5 +32,5 @@ app.configure(function () {
 	app.get('/locations/distance/:id', account.findByDistanceWithAccountID2);
 
 //app.listen(3001);
-app.listen(process.env.VCAP_APP_PORT || 3001);
+app.listen(process.env.PORT || process.env.VCAP_APP_PORT || 3001);
 console.log('Listening on port 3001...');
