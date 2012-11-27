@@ -32,5 +32,10 @@ app.configure(function () {
 	app.get('/locations/distance/:id', account.findByDistanceWithAccountID2);
 
 //app.listen(3001);
-app.listen(process.env.PORT || process.env.VCAP_APP_PORT || 3001);
-console.log('Listening on port 3001...');
+
+app.listen(process.env.PORT || process.env.VCAP_APP_PORT || 9000, function(){
+	console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+});
+
+//app.listen(process.env.PORT || process.env.VCAP_APP_PORT || 3001);
+//console.log('Listening on port 3001...');
