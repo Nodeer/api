@@ -500,24 +500,24 @@ exports.findByDistanceWithAccountID2 = function(req, res) {
     var number = req.body.number;
     var status = req.body.status;
     
-    //console.log('Retrieving accounts by distance: ' + number);
-    console.log('Retrieving accounts by distance - req.body1: ' + req.body);
-    //console.log('Retrieving accounts by distance - params: ' + JSON.stringify(req.params));
-    //console.log('Retrieving accounts by distance - req.body: ' + req.body['number']);
-    
-    //console.log('Retrieving accounts by distance - req.rawBody: ' + req.rawBody);
-    
-    
-    
-    for(var attributename in req.rawBody){
-    	console.log(attributename+": "+req.rawBody[attributename]);
-    	//conditions = 
-	}
-	
-	for(var attributename in req.params){
-    	console.log(attributename+": "+req.params[attributename]);
-    	//conditions = 
-	}
+//  //console.log('Retrieving accounts by distance: ' + number);
+//     console.log('Retrieving accounts by distance - req.body1: ' + req.body);
+//     //console.log('Retrieving accounts by distance - params: ' + JSON.stringify(req.params));
+//     //console.log('Retrieving accounts by distance - req.body: ' + req.body['number']);
+//     
+//     //console.log('Retrieving accounts by distance - req.rawBody: ' + req.rawBody);
+//     
+//     
+//     
+//     for(var attributename in req.rawBody){
+//     	console.log(attributename+": "+req.rawBody[attributename]);
+//     	//conditions = 
+// 	}
+// 	
+// 	for(var attributename in req.params){
+//     	console.log(attributename+": "+req.params[attributename]);
+//     	//conditions = 
+// 	}
 	
     db.collection('accounts', function(err, collection) {
     	collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, user) {
@@ -556,13 +556,11 @@ exports.findByDistanceWithAccountID3 = function(req, res) {
     var conditions = req.body.conditions;
     var number = req.body.number;
     
-    console.log('Retrieving accounts by distance - conditions: ' + JSON.stringify(req.body));
-    console.log('Retrieving accounts by distance - req.body.: ' + req.body);
+// 	console.log('Retrieving accounts by distance - conditions: ' + JSON.stringify(req.body));
+//  console.log('Retrieving accounts by distance - req.body.: ' + req.body);
     
-    
-    
-    for(var attributename in req.body){
-    	console.log(attributename+": "+req.body[attributename]);
+    for(var attributename in req.body.conditions){
+    	console.log(attributename+": "+req.body.conditions[attributename]);
     	//conditions = 
 	}
 	
