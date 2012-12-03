@@ -29,7 +29,7 @@ app.configure(function () {
 	//curl -i -X GET -H 'Content-Type: application/json' -d'{"loc" : [ 106.63896,10.827257 ],"number":"10", "conditions":{"usertype":"Driver"} }' http://localhost:3001/locations/distance
 	app.get('/locations/distance', account.findByDistance3);
 	//curl -i -X GET -H 'Content-Type: application/json' -d'{"number":"10","conitions":{"usertype":"Driver","status":"1"}}' http://localhost:3001/locations/distance/50a1be6e7028797132000001
-	app.get('/locations/distance/:id', account.findByDistanceWithAccountID3);
+	app.get('/locations/distance/:id', account.findByDistanceWithAccountID2);
 
 //app.listen(3001);
 
