@@ -501,6 +501,17 @@ exports.findByDistanceWithAccountID2 = function(req, res) {
     var status = req.body.status;
     
     console.log('Retrieving accounts by distance: ' + id);
+    console.log('Retrieving accounts by distance - conditions: ' + JSON.stringify(req.body));
+    console.log('Retrieving accounts by distance - params: ' + JSON.stringify(req.params));
+    console.log('Retrieving accounts by distance - req.body.: ' + req.body);
+    
+    
+    
+    for(var attributename in req.body){
+    	console.log(attributename+": "+req.body[attributename]);
+    	//conditions = 
+	}
+	
     db.collection('accounts', function(err, collection) {
     	collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, user) {
     		var point = user.loc;
