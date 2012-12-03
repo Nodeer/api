@@ -512,6 +512,11 @@ exports.findByDistanceWithAccountID2 = function(req, res) {
     	//conditions = 
 	}
 	
+	for(var attributename in req.params){
+    	console.log(attributename+": "+req.params[attributename]);
+    	//conditions = 
+	}
+	
     db.collection('accounts', function(err, collection) {
     	collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, user) {
     		var point = user.loc;
