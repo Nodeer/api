@@ -6,6 +6,17 @@ var app = express.createServer();
 
 app.configure(function () {
     app.use(express.logger('dev'));     /* 'default', 'short', 'tiny', 'dev' */
+    app.use(function(req, res, next) {
+		var data = '';
+		req.setEncoding('utf8');
+		req.on('data', function(chunk) { 
+			data += chunk;
+		});
+		req.on('end', function() {
+			req.rawBody = data;
+		});
+		next();
+	});
     app.use(express.bodyParser());
 });
 
