@@ -541,12 +541,12 @@ exports.findByDistanceWithAccountID3 = function(req, res) {
     console.log('Retrieving accounts by distance - conditions: ' + JSON.stringify(req.body.conditions));
     
     
-    /*
+    
     for(var attributename in req.body.conditions){
     	console.log(attributename+": "+req.body.conditions[attributename]);
     	//conditions = 
 	}
-	*/
+	
 	
     console.log('Retrieving accounts by distance: ' + id);
     db.collection('accounts', function(err, collection) {
