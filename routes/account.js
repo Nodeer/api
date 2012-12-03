@@ -544,11 +544,7 @@ exports.findByDistanceWithAccountID3 = function(req, res) {
     		var point = user.loc;
     		console.log('Retrieving accounts by distance: ' + point);
     		db.command({geoNear: 'accounts', near: user.loc, distanceMultiplier: 3963, spherical: true, num: number, 
-    					query:{
-							$and:[
-								conditions
-							]
-						}
+    					query:conditions
 				}, function(e, reply) {
 				if (e) { 
 					res.send("" + e); 
