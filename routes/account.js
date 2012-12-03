@@ -538,7 +538,7 @@ exports.findByDistanceWithAccountID3 = function(req, res) {
     var conditions = req.body.conditions;
     var number = req.body.number;
     
-    console.log('Retrieving accounts by distance - conditions: ' + JSON.stringify(req.body.conditions));
+    console.log('Retrieving accounts by distance - conditions: ' + JSON.stringify(req.body.number));
     
     
     
