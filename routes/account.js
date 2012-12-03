@@ -538,17 +538,28 @@ exports.findByDistanceWithAccountID3 = function(req, res) {
     var conditions = req.body.conditions;
     var number = req.body.number;
     
+    console.log('Retrieving accounts by distance - conditions: ' + JSON.stringify(req.body.conditions));
+    
+    
+    /*
+    for(var attributename in req.body.conditions){
+    	console.log(attributename+": "+req.body.conditions[attributename]);
+    	//conditions = 
+	}
+	*/
+	
     console.log('Retrieving accounts by distance: ' + id);
     db.collection('accounts', function(err, collection) {
     	collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, user) {
     		var point = user.loc;
     		console.log('Retrieving accounts by distance: ' + point);
     		db.command({geoNear: 'accounts', near: user.loc, distanceMultiplier: 3963, spherical: true, num: number, 
-    					query:
-							
-								conditions	
-							
-						
+    					query:{
+    						$and:[ 
+    							conditions
+    						]
+						}	
+								
 				}, function(e, reply) {
 				if (e) { 
 					res.send("" + e); 
