@@ -419,6 +419,37 @@ exports.findByDistance2 = function(req, res) {
     });
 }
 
+// Find the closed Users: return with distance
+// Input:
+//     	- location: {[lon,lat]}
+// 		- number: number of record return
+// 		- conditions: json condision - "conitions":{"usertype":"Driver","status":"1"}
+exports.findByDistance3 = function(req, res) {
+    var Location = req.body;
+    var number = req.body.number;
+    var conditions = req.body.conditions;
+    
+    //var obj = JSON.parse(Location);
+    //console.log('Retrieving accounts by distance: ' + req.body);
+    console.log('Retrieving accounts by distance: ' + req.body.loc);
+
+    db.command({geoNear: 'accounts', near: req.body.loc, distanceMultiplier: 3963, spherical: true, num: number,
+    	query:{
+			$and:[
+					conditions
+				]
+			}
+		}, function(e, reply) {
+		if (e) { 
+			res.send("" + e); 
+		}
+		else {
+			//console.log('Retrieving accounts by distance: ' + reply);
+			res.send(reply);
+		}
+    });
+}
+
 
 // Find the closed Users:
 // Input:
@@ -479,6 +510,43 @@ exports.findByDistanceWithAccountID2 = function(req, res) {
 							$and:[
 								{"usertype":type},
 								{"status":status}
+							]
+						}
+				}, function(e, reply) {
+				if (e) { 
+					res.send("" + e); 
+				}
+				else {
+					//console.log('Retrieving accounts by distance: ' + reply);
+					res.send(reply);
+				}
+			});
+            // collection.find({'loc': {$near: point}}).toArray(function(err, items) {
+//             	res.send(items);
+//         	});
+        });
+    });
+}
+
+// Find the closed Users:
+// Input:
+//     	- id: user ID (in URL)
+// 		- number: number of record return
+// 		- conditions: json condision - "conitions":{"usertype":"Driver","status":"1"}
+exports.findByDistanceWithAccountID3 = function(req, res) {
+    var id = req.params.id;
+    var conditions = req.body.conditions;
+    var number = req.body.number;
+    
+    console.log('Retrieving accounts by distance: ' + id);
+    db.collection('accounts', function(err, collection) {
+    	collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, user) {
+    		var point = user.loc;
+    		console.log('Retrieving accounts by distance: ' + point);
+    		db.command({geoNear: 'accounts', near: user.loc, distanceMultiplier: 3963, spherical: true, num: number, 
+    					query:{
+							$and:[
+								conditions
 							]
 						}
 				}, function(e, reply) {
