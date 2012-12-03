@@ -1,8 +1,8 @@
 var express = require('express'),
     account = require('./routes/account');
 
-var app = express.createServer();
-//var app = express();
+//var app = express.createServer();
+var app = express();
 
 app.configure(function () {
     app.use(express.logger('dev'));     /* 'default', 'short', 'tiny', 'dev' */
