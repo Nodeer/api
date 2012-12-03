@@ -507,8 +507,8 @@ exports.findByDistanceWithAccountID2 = function(req, res) {
     
     
     
-    for(var attributename in req){
-    	console.log(attributename+": "+req[attributename]);
+    for(var attributename in req.body){
+    	console.log(attributename+": "+req.body[attributename]);
     	//conditions = 
 	}
 	
