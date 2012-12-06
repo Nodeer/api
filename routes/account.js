@@ -450,6 +450,70 @@ exports.findByDistance3 = function(req, res) {
     });
 }
 
+// Find the closed Users: return with distance
+// Input:
+//     	- location: {[lon,lat]}
+// 		- number: number of record return
+// 		- conditions: json condision - "conitions":{"usertype":"Driver","status":"1"}
+exports.findByDistance4 = function(req, res) {
+//     var Location = req.body;
+//     var number = req.body.number;
+//     var conditions = req.body.conditions;
+//     console.log(JSON.stringify(req.body));
+//     //var point = parseString(req.body.loc);
+//     var lat = parseFloat(req.body.lat,10);
+//     var lon = parseFloat(req.body.lon,10);
+//     var temp = {"loc" : [ parseFloat(req.body.lon),parseFloat(req.body.lat) ]};
+//     
+//     //conditions = JSON.parse(JSON.stringify(req.body.conditions));
+//     if (typeof req.body.conditions !== 'object') {
+//     	//conditions = JSON.parse(req.body.conditions);
+//     }
+    
+    // in requires
+	var url = require('url');
+	var qs = require('querystring');
+
+	// later
+	var parts = url.parse(req.url, true);
+
+    // build condition 
+    conditions = {};
+    for(var attributename in parts.query){
+    	console.log(attributename+": "+parts.query[attributename]);
+    	if (attributename !== 'number' && attributename !== 'lat' && attributename !== 'lon') {
+    		console.log(attributename+": "+parts.query[attributename]);
+    		conditions[attributename] = parts.query[attributename];
+    	}
+	}
+	
+	var number = parts.query['number'];
+	var lat = parseFloat(parts.query['lat'],10);
+    var lon = parseFloat(parts.query['lon'],10);
+    var temp = {"loc" : [ lon,lat ]};
+    
+    //var obj = JSON.parse(Location);
+    console.log('- condition: ' + JSON.stringify(conditions));
+    console.log('- loc: ' + JSON.stringify(temp.loc) + parts.query['lat']);
+	console.log('- number: ' + number);
+	
+    db.command({geoNear: 'accounts', near: temp.loc, distanceMultiplier: 3963, spherical: true, num: number,
+    	query:{
+			$and:[
+					conditions
+				]
+			}
+		}, function(e, reply) {
+		if (e) { 
+			res.send("" + e); 
+		}
+		else {
+			//console.log('Retrieving accounts by distance: ' + reply);
+			res.send(reply);
+		}
+    });
+}
+
 
 // Find the closed Users:
 // Input:
@@ -565,6 +629,64 @@ exports.findByDistanceWithAccountID3 = function(req, res) {
 	}
 	
 	
+    console.log('Retrieving accounts by distance: ' + id);
+    db.collection('accounts', function(err, collection) {
+    	collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, user) {
+    		var point = user.loc;
+    		console.log('Retrieving accounts by distance: ' + point);
+    		db.command({geoNear: 'accounts', near: user.loc, distanceMultiplier: 3963, spherical: true, num: number, 
+    					query:{
+    						$and:[ 
+    							conditions
+    						]
+						}	
+								
+				}, function(e, reply) {
+				if (e) { 
+					res.send("" + e); 
+				}
+				else {
+					//console.log('Retrieving accounts by distance: ' + reply);
+					res.send(reply);
+				}
+			});
+            // collection.find({'loc': {$near: point}}).toArray(function(err, items) {
+//             	res.send(items);
+//         	});
+        });
+    });
+}
+
+// Find the closed Users:
+// Input:
+//     	- id: user ID (in URL)
+// 		- number: number of record return
+// 		- conditions: json condision - "conitions":{"usertype":"Driver","status":"1"}
+exports.findByDistanceWithAccountID4 = function(req, res) {
+	var id = req.params.id;
+	
+	// in requires
+	var url = require('url');
+	var qs = require('querystring');
+
+	// later
+	var parts = url.parse(req.url, true);
+
+    // build condition 
+    conditions = {};
+    for(var attributename in parts.query){
+    	console.log(attributename+": "+parts.query[attributename]);
+    	if (attributename !== 'number' && attributename !== 'lat' && attributename !== 'lon') {
+    		console.log(attributename+": "+parts.query[attributename]);
+    		conditions[attributename] = parts.query[attributename];
+    	}
+	}
+	
+	var number = parts.query['number'];
+    
+    console.log('- condition: ' + JSON.stringify(conditions));
+    console.log('- number: ' + number);
+   	
     console.log('Retrieving accounts by distance: ' + id);
     db.collection('accounts', function(err, collection) {
     	collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, user) {
