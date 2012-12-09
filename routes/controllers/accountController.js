@@ -1,8 +1,8 @@
-var express = require('express'),
+//var express = require('express'),
     //account = require('./routes/account');
-    AM = require('../modules/accountModule');;
+var    AM = require('../modules/accountModule');;
 
-var app = express.createServer();
+//var app = express.createServer();
 
 
 //~/Working/aigo/api/routes/modules/accountModule.js
@@ -24,6 +24,7 @@ exports.signUp = function(req, res)
 
 exports.login = function(req, res) 
 {
+	console.log('login: ' + req.body.user);
 	var retdata = {};
 	AM.manualLogin(req.body.user, req.body.pass,function(e, o) {
 		if (!o) {
@@ -33,7 +34,9 @@ exports.login = function(req, res)
 			retdata = o;
 			
 			// update status online
-			var id = o.id;
+			var id = o._id.toHexString();
+			//id = '50a1be6e7028797132000001';
+			console.log('login: ' + id);
 			var Status = 1;
 			AM.updateStatus(id,Status,function(e, o) {
 				if (e) {
@@ -41,6 +44,7 @@ exports.login = function(req, res)
 					res.send(retdata, 400);
 				}	else {
 					//retdata = o;
+					retdata.status = Status;
 					retdata.msg = 'ok';
 					res.send(retdata, 200);
 				}
@@ -102,6 +106,48 @@ exports.findById = function(req, res) {
 		}
 	});	
 };
+
+// Update user info
+// Input:
+//     	- User info in json
+exports.updateInfo = function(req, res) {
+    var info = req.body;
+    console.log(JSON.stringify(info));
+    
+    var retdata = {};
+	AM.freeUpdate(info,function(e, o) {
+		if (e) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else {
+			retdata = o;
+			retdata.msg = 'ok';
+			res.send(retdata, 200);
+		}
+	});	
+}
+
+// Update user rating
+// Input:
+//     	- id: user ID (in URL)
+//     	- like: 0 - 1
+exports.rating = function(req, res) {
+	var id = req.params.id;
+    var like = req.body.like;
+    console.log(JSON.stringify(like));
+    
+    var retdata = {};
+	AM.rating(id,like,function(e, o) {
+		if (e) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else {
+			retdata = o;
+			retdata.msg = 'ok';
+			res.send(retdata, 200);
+		}
+	});	
+}
 
 // Update user location
 // Input:

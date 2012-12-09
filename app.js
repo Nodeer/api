@@ -26,6 +26,10 @@ app.configure(function () {
 	app.post('/accounts/location/:id', account.updateLocation);
 	//curl -i -X POST -H 'Content-Type: application/json' -d'{"status":"1"}' http://localhost:3001/accounts/status/50a1be6e7028797132000001
 	app.post('/accounts/status/:id', account.updateStatus);
+	//curl -X POST -H 'Content-Type: application/json' -d'{"user":"trong", "pass":"123456","seat":"8" }' http://localhost:3001/accounts/info
+	app.post('/accounts/info', account.updateInfo);
+	//curl -X POST -H 'Content-Type: application/json' -d'{"like":"0"}' http://localhost:3001/accounts/rating/50a1be6e7028797132000001
+	app.post('/accounts/rating/:id', account.rating);
 
 //LOCATION
 	//curl -i -X POST -H 'Content-Type: application/json' -d'{"loc" : [ 106.63896,10.827257 ],"number":"10", "conditions":{"usertype":"Driver"} }' http://localhost:3001/locations/distance

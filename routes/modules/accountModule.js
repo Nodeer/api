@@ -143,6 +143,58 @@ AM.update = function(newData, callback)
 	});
 }
 
+AM.freeUpdate = function(newData, callback)
+{
+	AM.accounts.findOne({user:newData.user}, function(e, o){
+		for(var attributename in newData){
+    		console.log("- updating:" + attributename+": "+newData[attributename]);
+			o[attributename] = newData[attributename];
+			if (newData.pass == ''){
+				AM.accounts.save(o); callback(null,o);
+			}	else{
+				AM.saltAndHash(newData.pass, function(hash){
+					o.pass = hash;
+					AM.accounts.save(o); callback(null,o);
+				});
+			}
+		}
+	});
+}
+
+AM.rating = function(id,like,callback)
+{
+    var info =  { "rating": 
+		{ 
+		  "like": 0, 
+		  "dislike": 0 
+		}
+	}
+	AM.accounts.findOne({_id: this.getObjectId(id)},
+		function(e, o) {
+		if (e) {
+            console.log(e);
+			callback(e,null);
+        } else {    
+			if (o.rating == null) {
+				if (like == 1) {
+					info.rating.like = info.rating.like + 1;
+				} else {
+					info.rating.dislike =  info.rating.dislike + 1;
+				}
+			} else {
+				if (like == 1) {
+					o.rating.like = o.rating.like + 1;
+				} else {
+					o.rating.dislike =  o.rating.dislike + 1;
+				}
+				info.rating = o.rating;
+			}
+			AM.accounts.save(o); callback(null,o);
+		}
+    });
+}
+
+
 AM.setPassword = function(email, newPass, callback)
 {
 	AM.accounts.findOne({email:email}, function(e, o){
