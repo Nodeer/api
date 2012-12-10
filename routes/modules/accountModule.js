@@ -104,20 +104,26 @@ AM.manualLogin = function(user, pass, callback)
 AM.signup = function(newData, callback)
 {
 	AM.accounts.findOne({user:newData.user}, function(e, o) {
-		console.log('user: ' + newData);
+		console.log('user: ' + JSON.stringify(newData));
 		if (o){
 			console.log('username-taken: ' + o);
-			callback('username-taken');
+			callback('username-taken',null);
 		}	else{
 			AM.accounts.findOne({email:newData.email}, function(e, o) {
 				if (o){
-					callback('email-taken');
+					callback('email-taken',null);
 				}	else{
 					AM.saltAndHash(newData.pass, function(hash){
 						newData.pass = hash;
 					// append date stamp when record was created //
 						newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
-						AM.accounts.insert(newData, callback(null));
+						AM.accounts.insert(newData, function(e, o) {
+							if (e) {
+								callback(e,null);
+							}	else {	
+								callback(null,o);
+							}
+						});
 					});
 				}
 			});

@@ -10,12 +10,13 @@ var    AM = require('../modules/accountModule');;
 exports.signUp = function(req, res) 
 {
 	var retdata = {};
+	console.log('user: ' + req.body.user);
 	AM.signup(req.body, function(e, o) {
 		if (e) {
 			retdata.msg = e;
 			res.send(retdata, 400);
 		}	else {
-			retdata = req.body;
+			retdata = o;
 			retdata.msg = 'ok';
 			res.send(retdata, 200);
 		}
