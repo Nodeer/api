@@ -1,6 +1,7 @@
 var express = require('express'),
     //account = require('./routes/account');
     account = require('./routes/controllers/accountController');
+    apn = require('./routes/controllers/apnController');
 
 var app = express.createServer();
 //var app = express();
@@ -37,6 +38,10 @@ app.configure(function () {
 	//curl -i -X POST -H 'Content-Type: application/json' -d'{"conditions":{"usertype":"Driver","status":"1"},"num":"10" }' http://localhost:3001/locations/distance/50a1be6e7028797132000001
 	app.post('/locations/distance/:id', account.findByDistanceWithAccountID);
 
+// APNS
+	//curl -X POST  http://localhost:3001/apn/simplepush
+	app.post('/apn/simplepush', apn.simplePush);
+	
 //app.listen(3001);
 
 app.listen(process.env.PORT || process.env.VCAP_APP_PORT || 3001, function(){

@@ -1,6 +1,6 @@
 //var express = require('express'),
     //account = require('./routes/account');
-var    AM = require('../modules/accountModule');;
+var    AM = require('../modules/accountModule');
 
 //var app = express.createServer();
 
