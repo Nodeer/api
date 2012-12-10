@@ -1,7 +1,7 @@
 var express = require('express'),
     //account = require('./routes/account');
     account = require('./routes/controllers/accountController');
-    apn = require('./routes/controllers/apnController');
+    apns = require('./routes/controllers/apnController');
 
 var app = express.createServer();
 //var app = express();
@@ -32,6 +32,13 @@ app.configure(function () {
 	//curl -X POST -H 'Content-Type: application/json' -d'{"like":"0"}' http://localhost:3001/accounts/rating/50a1be6e7028797132000001
 	app.post('/accounts/rating/:id', account.rating);
 
+	//curl -X POST -H 'Content-Type: application/json' -d'{"deviceToken":"aeace3a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b590"}' http://localhost:3001/accounts/adddevicetoken/50a1be6e7028797132000001
+	app.post('/accounts/adddevicetoken/:id', account.addDeviceToken);
+	//curl -X POST -H 'Content-Type: application/json' -d'{"deviceToken":"aeace3a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b590"}' http://localhost:3001/accounts/deletedevicetoken/50a1be6e7028797132000001
+	app.post('/accounts/deletedevicetoken/:id', account.deleteDeviceToken);
+	//curl -X POST -H 'Content-Type: application/json' -d'{"deviceToken":"aeace3a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b592","oldDeviceToken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b591"}' http://localhost:3001/accounts/updatedevicetoken/50a1be6e7028797132000001
+	app.post('/accounts/updatedevicetoken/:id', account.updateDeviceToken);
+
 //LOCATION
 	//curl -i -X POST -H 'Content-Type: application/json' -d'{"loc" : [ 106.63896,10.827257 ],"number":"10", "conditions":{"usertype":"Driver"} }' http://localhost:3001/locations/distance
 	app.post('/locations/distance', account.findByDistance);
@@ -40,7 +47,7 @@ app.configure(function () {
 
 // APNS
 	//curl -X POST  http://localhost:3001/apn/simplepush
-	app.post('/apn/simplepush', apn.simplePush);
+	app.post('/apns/simplepush', apns.simplePush);
 	
 //app.listen(3001);
 

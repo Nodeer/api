@@ -60,6 +60,31 @@ require('mongodb').connect(mongourl, function(err, conn){
 	AM.accounts = db.collection('accounts');
 });
 
+
+//////////////////--Helper--//////////////////
+var insertItem2Array = function(array,item) {
+	//console.log('-array' + array + '-item' + item);
+
+	//console.log('-check' + array.indexOf(item));
+	
+	if (array.indexOf(item) < 0) {
+		array.push(item);
+	} 
+	return array;
+}
+var deleteItem2Array = function(array,item) {
+	//console.log('-array' + array + '-item' + item);
+
+	//console.log('-check' + array.indexOf(item));
+	var index = array.indexOf(item);
+	if (index < 0) {
+		//array.push(item);
+	} else {
+		array.splice(index,1);
+	}
+	return array;
+}
+
 //var DB = require('./dbModule');
 
 // constructor call
@@ -148,58 +173,6 @@ AM.update = function(newData, callback)
 		}
 	});
 }
-
-AM.freeUpdate = function(newData, callback)
-{
-	AM.accounts.findOne({user:newData.user}, function(e, o){
-		for(var attributename in newData){
-    		console.log("- updating:" + attributename+": "+newData[attributename]);
-			o[attributename] = newData[attributename];
-			if (newData.pass == ''){
-				AM.accounts.save(o); callback(null,o);
-			}	else{
-				AM.saltAndHash(newData.pass, function(hash){
-					o.pass = hash;
-					AM.accounts.save(o); callback(null,o);
-				});
-			}
-		}
-	});
-}
-
-AM.rating = function(id,like,callback)
-{
-    var info =  { "rating": 
-		{ 
-		  "like": 0, 
-		  "dislike": 0 
-		}
-	}
-	AM.accounts.findOne({_id: this.getObjectId(id)},
-		function(e, o) {
-		if (e) {
-            console.log(e);
-			callback(e,null);
-        } else {    
-			if (o.rating == null) {
-				if (like == 1) {
-					info.rating.like = info.rating.like + 1;
-				} else {
-					info.rating.dislike =  info.rating.dislike + 1;
-				}
-			} else {
-				if (like == 1) {
-					o.rating.like = o.rating.like + 1;
-				} else {
-					o.rating.dislike =  o.rating.dislike + 1;
-				}
-				info.rating = o.rating;
-			}
-			AM.accounts.save(o); callback(null,o);
-		}
-    });
-}
-
 
 AM.setPassword = function(email, newPass, callback)
 {
@@ -336,6 +309,108 @@ AM.updateStatus = function(id, Status, callback)
                 callback(null,o);
             }
         });
+    });
+}
+
+AM.freeUpdate = function(newData, callback)
+{
+	AM.accounts.findOne({user:newData.user}, function(e, o){
+		for(var attributename in newData){
+    		console.log("- updating:" + attributename+": "+newData[attributename]);
+			o[attributename] = newData[attributename];
+			if (newData.pass == ''){
+				AM.accounts.save(o); callback(null,o);
+			}	else{
+				AM.saltAndHash(newData.pass, function(hash){
+					o.pass = hash;
+					AM.accounts.save(o); callback(null,o);
+				});
+			}
+		}
+	});
+}
+
+AM.addDeviceToken = function(id,deviceToken,callback)
+{
+	AM.accounts.findOne({_id: this.getObjectId(id)}, function(e, o) {
+		if (e || !o) callback(e,null)
+		else {
+			var devices = { 
+				  "iOS":[deviceToken]
+			}
+			
+			if (o.devices == null) {
+				o.devices = devices;
+			} else {
+				o.devices.iOS = insertItem2Array(o.devices.iOS,deviceToken);
+			}
+			AM.accounts.save(o); callback(null,o);
+		}
+	});
+}
+
+AM.deleteDeviceToken = function(id,deviceToken,callback)
+{
+	AM.accounts.findOne({_id: this.getObjectId(id)}, function(e, o) {
+		if (e || !o) callback(e,null)
+		else {
+			if (o.devices == null) {
+				callback(null,null);
+			} else {
+				o.devices.iOS = deleteItem2Array(o.devices.iOS,deviceToken);
+				AM.accounts.save(o); callback(null,o);
+			}
+		}
+	});
+}
+
+
+AM.updateDeviceToken = function(id,deviceToken,olddeviceToken,callback)
+{
+	AM.accounts.findOne({_id: this.getObjectId(id)}, function(e, o) {
+		if (e || !o) callback(e,null)
+		else {
+			if (o.devices == null) {
+				callback(null,null);
+			} else {
+				o.devices.iOS = insertItem2Array(o.devices.iOS,deviceToken);
+				o.devices.iOS = deleteItem2Array(o.devices.iOS,olddeviceToken);
+				AM.accounts.save(o); callback(null,o);
+			}
+		}
+	});
+}
+
+AM.rating = function(id,like,callback)
+{
+    var info =  { "rating": 
+		{ 
+		  "like": 0, 
+		  "dislike": 0 
+		}
+	}
+	AM.accounts.findOne({_id: this.getObjectId(id)},
+		function(e, o) {
+		if (e) {
+            console.log(e);
+			callback(e,null);
+        } else {    
+			if (o.rating == null) {
+				if (like == 1) {
+					info.rating.like = info.rating.like + 1;
+				} else {
+					info.rating.dislike =  info.rating.dislike + 1;
+				}
+			} else {
+				if (like == 1) {
+					o.rating.like = o.rating.like + 1;
+				} else {
+					o.rating.dislike =  o.rating.dislike + 1;
+				}
+				info.rating = o.rating;
+			}
+			AM.accounts.save(o); callback(null,o);
+		}
     });
 }
 

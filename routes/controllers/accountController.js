@@ -108,26 +108,6 @@ exports.findById = function(req, res) {
 	});	
 };
 
-// Update user info
-// Input:
-//     	- User info in json
-exports.updateInfo = function(req, res) {
-    var info = req.body;
-    console.log(JSON.stringify(info));
-    
-    var retdata = {};
-	AM.freeUpdate(info,function(e, o) {
-		if (e) {
-			retdata.msg = e;
-			res.send(retdata, 400);
-		}	else {
-			retdata = o;
-			retdata.msg = 'ok';
-			res.send(retdata, 200);
-		}
-	});	
-}
-
 // Update user rating
 // Input:
 //     	- id: user ID (in URL)
@@ -139,6 +119,26 @@ exports.rating = function(req, res) {
     
     var retdata = {};
 	AM.rating(id,like,function(e, o) {
+		if (e) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else {
+			retdata = o;
+			retdata.msg = 'ok';
+			res.send(retdata, 200);
+		}
+	});	
+}
+
+// Update user info
+// Input:
+//     	- User info in json
+exports.updateInfo = function(req, res) {
+    var info = req.body;
+    console.log(JSON.stringify(info));
+    
+    var retdata = {};
+	AM.freeUpdate(info,function(e, o) {
 		if (e) {
 			retdata.msg = e;
 			res.send(retdata, 400);
@@ -185,6 +185,73 @@ exports.updateStatus = function(req, res) {
     var retdata = {};
 	AM.updateStatus(id,Status,function(e, o) {
 		if (e) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else {
+			retdata = o;
+			retdata.msg = 'ok';
+			res.send(retdata, 200);
+		}
+	});	
+}
+
+// Add device token
+// Input:
+//     	- id: user ID (in URL)
+//     	- device token for APNS
+exports.addDeviceToken = function(req, res) {
+    var id = req.params.id;
+    var deviceToken = req.body.deviceToken;
+    console.log('Add device token: ' + id); 
+    
+    var retdata = {};
+	AM.addDeviceToken(id,deviceToken,function(e, o) {
+		if (e || !o) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else {
+			retdata = o;
+			retdata.msg = 'ok';
+			res.send(retdata, 200);
+		}
+	});	
+}
+
+// Delete device token
+// Input:
+//     	- id: user ID (in URL)
+//     	- device token for APNS
+exports.deleteDeviceToken = function(req, res) {
+    var id = req.params.id;
+    var deviceToken = req.body.deviceToken;
+    console.log('Delete device token: ' + id); 
+    
+    var retdata = {};
+	AM.deleteDeviceToken(id,deviceToken,function(e, o) {
+		if (e || !o) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else {
+			retdata = o;
+			retdata.msg = 'ok';
+			res.send(retdata, 200);
+		}
+	});	
+}
+
+// Update device token
+// Input:
+//     	- id: user ID (in URL)
+//     	- device token for APNS
+exports.updateDeviceToken = function(req, res) {
+    var id = req.params.id;
+    var deviceToken = req.body.deviceToken;
+    var olddeviceToken = req.body.oldDeviceToken;
+    console.log('Delete device token: ' + id); 
+    
+    var retdata = {};
+	AM.updateDeviceToken(id,deviceToken,olddeviceToken,function(e, o) {
+		if (e || !o) {
 			retdata.msg = e;
 			res.send(retdata, 400);
 		}	else {
