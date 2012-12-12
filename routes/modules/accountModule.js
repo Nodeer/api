@@ -336,7 +336,7 @@ AM.addDeviceToken = function(id,deviceToken,callback)
 		if (e || !o) callback(e,null)
 		else {
 			var devices = { 
-				  "iOS":[deviceToken]
+				"iOS":[deviceToken]
 			}
 			
 			if (o.devices == null) {
