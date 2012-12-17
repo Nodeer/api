@@ -381,6 +381,43 @@ AM.updateDeviceToken = function(id,deviceToken,olddeviceToken,callback)
 	});
 }
 
+
+AM.addLocations = function(id,locations,callback)
+{
+	console.log("xxxxxxxx" + locations);
+	AM.accounts.findOne({_id: this.getObjectId(id)}, function(e, o) {
+		if (e || !o) callback(e,null)
+		else {
+			if (o.savedlocations == null) {
+				o.savedlocations = locations;
+			} else {
+				for (var i = locations.length - 1; i >= 0; i--) {
+					o.savedlocations = insertItem2Array(o.savedlocations,locations[i]);
+				};
+			}
+			AM.accounts.save(o); callback(null,o);
+		}
+	});
+}
+
+AM.deleteLocations = function(id,locations,callback)
+{
+	console.log("xxxxxxxx" + locations);
+	AM.accounts.findOne({_id: this.getObjectId(id)}, function(e, o) {
+		if (e || !o) callback(e,null)
+		else {
+			if (o.savedlocations == null) {
+				callback(null,null);
+			} else {
+				for (var i = locations.length - 1; i >= 0; i--) {
+					o.savedlocations = deleteItem2Array(o.savedlocations,locations[i]);
+				};
+				AM.accounts.save(o); callback(null,o);
+			}
+		}
+	});
+}
+
 AM.rating = function(id,like,callback)
 {
     var info =  { "rating": 

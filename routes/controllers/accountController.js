@@ -262,6 +262,49 @@ exports.updateDeviceToken = function(req, res) {
 	});	
 }
 
+// Add locations 
+// Input:
+//     	- id: user ID (in URL)
+//     	- array locations
+exports.addLocations = function(req, res) {
+    var id = req.params.id;
+    var locations = req.body.locations;
+    console.log('Add locations: ' + id); 
+    
+    var retdata = {};
+	AM.addLocations(id,locations,function(e, o) {
+		if (e || !o) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else {
+			retdata = o;
+			retdata.msg = 'ok';
+			res.send(retdata, 200);
+		}
+	});	
+}
+
+// Delete location
+// Input:
+//     	- id: user ID (in URL)
+//     	- device token for APNS
+exports.deleteLocations = function(req, res) {
+    var id = req.params.id;
+    var locations = req.body.locations;
+    console.log('Delete locations: ' + id); 
+    
+    var retdata = {};
+	AM.deleteLocations(id,locations,function(e, o) {
+		if (e || !o) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else {
+			retdata = o;
+			retdata.msg = 'ok';
+			res.send(retdata, 200);
+		}
+	});	
+}
 // Find the closed Users: return without distance
 // Input:
 //     	- location: {[lon,lat]}

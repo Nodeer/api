@@ -32,6 +32,11 @@ app.configure(function () {
 	//curl -X POST -H 'Content-Type: application/json' -d'{"like":"0"}' http://localhost:3001/accounts/rating/50a1be6e7028797132000001
 	app.post('/accounts/rating/:id', account.rating);
 
+	//curl -X POST -H 'Content-Type: application/json' -d'{"locations":["Le Thah Ton Q3 HCM VN"]}' http://localhost:3001/accounts/savelocation/add/50a1be6e7028797132000001
+	app.post('/accounts/savelocation/add/:id', account.addLocations);
+	//curl -X POST -H 'Content-Type: application/json' -d'{"locations":["Le Thah Ton Q3 HCM VN"]}' http://localhost:3001/accounts/savelocation/delete/50a1be6e7028797132000001
+	app.post('/accounts/savelocation/delete/:id', account.deleteLocations);
+
 	//curl -X POST -H 'Content-Type: application/json' -d'{"deviceToken":"aeace3a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b590"}' http://localhost:3001/accounts/adddevicetoken/50a1be6e7028797132000001
 	app.post('/accounts/adddevicetoken/:id', account.addDeviceToken);
 	//curl -X POST -H 'Content-Type: application/json' -d'{"deviceToken":"aeace3a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b590"}' http://localhost:3001/accounts/deletedevicetoken/50a1be6e7028797132000001
