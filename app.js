@@ -53,12 +53,12 @@ app.configure(function () {
 // APNS
 	//curl -X POST  http://localhost:3001/apn/simplepush
 	app.post('/apns/simplepush', apns.simplePush);
-	//curl -X POST  -H 'Content-Type: application/json' -d'{"alert" : { "body"  "Bob wants to play poker", "action-loc-key" : "Reject" },"badge":"0"}' http://localhost:3001/apns/requesttaxi/50a1be6e7028797132000001
+	//curl -X POST  -H 'Content-Type: application/json' -d'{"alert" : { "body" : "Bob wants to play poker", "action-loc-key" : "Reject" },"badge":"0"}' http://localhost:3001/apns/requesttaxi/50a1be6e7028797132000001
 	app.post('/apns/requesttaxi/:id', apns.pushToRequestTaxi);
-	//curl -X POST  -H 'Content-Type: application/json' -d'{"alert" : { "body"  "Bob wants to play poker", "action-loc-key" : "Reject" },"badge":"0"}' http://localhost:3001/apns/respondclient/50a1be6e7028797132000001
-	app.post('/apns/respondclient/:id', apns.pushToRequestTaxi);
-	//curl -X POST  -H 'Content-Type: application/json' -d'{"alert" : { "body"  "Bob wants to play poker", "action-loc-key" : "Reject" },"badge":"0"}' http://localhost:3001/apns/arrivalnotify/50a1be6e7028797132000001
-	app.post('/apns/arrivalnotify/:id', apns.pushToRequestTaxi);
+	//curl -X POST  -H 'Content-Type: application/json' -d'{"alert" : { "body" : "Bob wants to play poker", "action-loc-key" : "Reject" },"badge":"0"}' http://localhost:3001/apns/respondclient/50a1be6e7028797132000001
+	app.post('/apns/respondclient/:id', apns.pushToClient);
+	//curl -X POST  -H 'Content-Type: application/json' -d'{"alert" : { "body" : "Bob wants to play poker", "action-loc-key" : "Reject" },"badge":"0"}' http://localhost:3001/apns/arrivalnotify/50a1be6e7028797132000001
+	app.post('/apns/arrivalnotify/:id', apns.pushToClient);
 	
 //app.listen(3001);
 

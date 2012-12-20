@@ -14,7 +14,7 @@ exports.signUp = function(req, res)
 	AM.signup(req.body, function(e, o) {
 		if (e) {
 			retdata.msg = e;
-			res.send(retdata, 200);
+			res.send(retdata, 400);
 		}	else {
 			retdata = o;
 			retdata.msg = 'ok';
@@ -30,7 +30,7 @@ exports.login = function(req, res)
 	AM.manualLogin(req.body.user, req.body.pass,function(e, o) {
 		if (!o) {
 			retdata.msg = e;
-			res.send(retdata, 200);
+			res.send(retdata, 400);
 		}	else {
 			retdata = o;
 			
@@ -42,7 +42,7 @@ exports.login = function(req, res)
 			AM.updateStatus(id,Status,function(e, o) {
 				if (e) {
 					retdata.msg = e;
-					res.send(retdata, 200);
+					res.send(retdata, 400);
 				}	else {
 					//retdata = o;
 					retdata.status = Status;
@@ -64,7 +64,7 @@ exports.logout = function(req, res)
 	AM.updateStatus(id,Status,function(e, o) {
 		if (e) {
 			retdata.msg = e;
-			res.send(retdata, 200);
+			res.send(retdata, 400);
 		}	else {
 			retdata = o;
 			retdata.msg = 'ok';
@@ -80,7 +80,7 @@ exports.findAll = function(req, res)
 	AM.getAllRecords(function(e, o) {
 		if (!o) {
 			retdata.msg = e;
-			res.send(retdata, 200);
+			res.send(retdata, 400);
 		}	else {
 			retdata = o;
 			retdata.msg = 'ok';
@@ -99,7 +99,7 @@ exports.findById = function(req, res) {
 	AM.findById(id,function(e, o) {
 		if (!o) {
 			retdata.msg = e;
-			res.send(retdata, 200);
+			res.send(retdata, 400);
 		}	else {
 			retdata = o;
 			retdata.msg = 'ok';
@@ -121,7 +121,7 @@ exports.rating = function(req, res) {
 	AM.rating(id,like,function(e, o) {
 		if (e) {
 			retdata.msg = e;
-			res.send(retdata, 200);
+			res.send(retdata, 400);
 		}	else {
 			retdata = o;
 			retdata.msg = 'ok';
@@ -141,7 +141,7 @@ exports.updateInfo = function(req, res) {
 	AM.freeUpdate(info,function(e, o) {
 		if (e) {
 			retdata.msg = e;
-			res.send(retdata, 200);
+			res.send(retdata, 400);
 		}	else {
 			retdata = o;
 			retdata.msg = 'ok';
@@ -164,7 +164,7 @@ exports.updateLocation = function(req, res) {
 	AM.updateLocation(id,Location,function(e, o) {
 		if (e) {
 			retdata.msg = e;
-			res.send(retdata, 200);
+			res.send(retdata, 400);
 		}	else {
 			retdata = o;
 			retdata.msg = 'ok';
@@ -186,7 +186,7 @@ exports.updateStatus = function(req, res) {
 	AM.updateStatus(id,Status,function(e, o) {
 		if (e) {
 			retdata.msg = e;
-			res.send(retdata, 200);
+			res.send(retdata, 400);
 		}	else {
 			retdata = o;
 			retdata.msg = 'ok';
@@ -208,7 +208,7 @@ exports.addDeviceToken = function(req, res) {
 	AM.addDeviceToken(id,deviceToken,function(e, o) {
 		if (e || !o) {
 			retdata.msg = e;
-			res.send(retdata, 200);
+			res.send(retdata, 400);
 		}	else {
 			retdata = o;
 			retdata.msg = 'ok';
@@ -230,7 +230,7 @@ exports.deleteDeviceToken = function(req, res) {
 	AM.deleteDeviceToken(id,deviceToken,function(e, o) {
 		if (e || !o) {
 			retdata.msg = e;
-			res.send(retdata, 200);
+			res.send(retdata, 400);
 		}	else {
 			retdata = o;
 			retdata.msg = 'ok';
@@ -253,7 +253,7 @@ exports.updateDeviceToken = function(req, res) {
 	AM.updateDeviceToken(id,deviceToken,olddeviceToken,function(e, o) {
 		if (e || !o) {
 			retdata.msg = e;
-			res.send(retdata, 200);
+			res.send(retdata, 400);
 		}	else {
 			retdata = o;
 			retdata.msg = 'ok';
@@ -275,7 +275,7 @@ exports.addLocations = function(req, res) {
 	AM.addLocations(id,locations,function(e, o) {
 		if (e || !o) {
 			retdata.msg = e;
-			res.send(retdata, 200);
+			res.send(retdata, 400);
 		}	else {
 			retdata = o;
 			retdata.msg = 'ok';
@@ -297,7 +297,7 @@ exports.deleteLocations = function(req, res) {
 	AM.deleteLocations(id,locations,function(e, o) {
 		if (e || !o) {
 			retdata.msg = e;
-			res.send(retdata, 200);
+			res.send(retdata, 400);
 		}	else {
 			retdata = o;
 			retdata.msg = 'ok';
@@ -324,7 +324,7 @@ exports.findByDistance = function(req, res) {
 	AM.findByDistance(req.body.loc,number,conditions,function(e, o) {
 		if (e) {
 			retdata.msg = e;
-			res.send(retdata, 200);
+			res.send(retdata, 400);
 		}	else {
 			retdata = o;
 			retdata.msg = 'ok';
@@ -351,12 +351,12 @@ exports.findByDistanceWithAccountID = function(req, res) {
 	AM.findById(id,function(e, o) {
 		if (e) {
 			retdata.msg = e;
-			res.send(retdata, 200);
+			res.send(retdata, 400);
 		}	else {
 			AM.findByDistance(o.loc,number,conditions,function(e, o) {
 				if (e) {
 					retdata.msg = e;
-					res.send(retdata, 200);
+					res.send(retdata, 400);
 				}	else {
 					retdata = o;
 					retdata.msg = 'ok';
