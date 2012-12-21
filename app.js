@@ -16,9 +16,9 @@ app.configure(function () {
 	//http://taxivnapi.rs.af.cm/accounts/signup
 	app.post('/accounts/signup', account.signUp);
 	//curl -X POST -H 'Content-Type: application/json' -d'{"user":"trong", "pa":"123456"}' http://localhost:3001/accounts/login
-	app.post('/accounts/login', account.login);
+	app.post('/accounts/login', account.loginWithDeviceToken);
 	//curl -X POST  http://localhost:3001/accounts/logout/50a1be6e7028797132000001
-	app.post('/accounts/logout/:id', account.logout);
+	app.post('/accounts/logout/:id', account.logoutWithDeviceToken);
 	//http://taxivnapi.rs.af.cm/accounts/
 	app.get('/accounts', account.findAll);
 	//http://taxivnapi.rs.af.cm/accounts/50a1be6e7028797132000001

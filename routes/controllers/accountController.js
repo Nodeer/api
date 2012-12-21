@@ -54,6 +54,47 @@ exports.login = function(req, res)
 	});	
 };
 
+exports.loginWithDeviceToken = function(req, res) 
+{
+	console.log('login: ' + req.body.user);
+	var retdata = {};
+	AM.manualLogin(req.body.user, req.body.pass,function(e, o) {
+		if (!o) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else {
+			retdata = o;
+			
+			// update status online
+			var id = o._id.toHexString();
+			//id = '50a1be6e7028797132000001';
+			console.log('login: ' + id);
+			var Status = 1;
+			AM.updateStatus(id,Status,function(e, o) {
+				if (e) {
+					retdata.msg = e;
+					res.send(retdata, 400);
+				}	else {
+					//retdata = o;
+					retdata.status = Status;
+					retdata.msg = 'ok';
+					var deviceToken = req.body.devicetoken;
+					AM.addDeviceToken(id,deviceToken,function(e, o) {
+						if (e || !o) {
+							retdata.msg = e;
+							res.send(retdata, 400);
+						}	else {
+							//retdata = o;
+							//retdata.msg = 'ok';
+							res.send(retdata, 200);
+						}
+					});	
+				}
+			});	
+		}
+	});	
+};
+
 exports.logout = function(req, res) 
 {
 	var id = req.params.id;
@@ -69,6 +110,36 @@ exports.logout = function(req, res)
 			retdata = o;
 			retdata.msg = 'ok';
 			res.send(retdata, 200);
+		}
+	});	
+};
+
+exports.logoutWithDeviceToken = function(req, res) 
+{
+	var id = req.params.id;
+    var Status = 0;
+    console.log('Logout: ' + id); 
+    
+    var retdata = {};
+	AM.updateStatus(id,Status,function(e, o) {
+		if (e) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else {
+			retdata = o;
+			retdata.msg = 'ok';
+			var deviceToken = req.body.devicetoken;
+			AM.deleteDeviceToken(id,deviceToken,function(e, o) {
+				if (e || !o) {
+					retdata.msg = e;
+					res.send(retdata, 400);
+				}	else {
+					//retdata = o;
+					//retdata.msg = 'ok';
+					res.send(retdata, 200);
+				}
+			});	
+			//res.send(retdata, 200);
 		}
 	});	
 };
