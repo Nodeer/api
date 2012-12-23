@@ -58,7 +58,7 @@ exports.loginWithDeviceToken = function(req, res)
 {
 	console.log('login: ' + req.body.user);
 	var retdata = {};
-	AM.manualLogin(req.body.user, req.body.pass,function(e, o) {
+	AM.manualLoginWithType(req.body.user, req.body.pass, req.body.usertype, function(e, o) {
 		if (!o) {
 			retdata.msg = e;
 			res.send(retdata, 400);
@@ -134,8 +134,8 @@ exports.logoutWithDeviceToken = function(req, res)
 					retdata.msg = e;
 					res.send(retdata, 400);
 				}	else {
-					//retdata = o;
-					//retdata.msg = 'ok';
+					retdata = o;
+					retdata.msg = 'ok';
 					res.send(retdata, 200);
 				}
 			});	

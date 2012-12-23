@@ -124,6 +124,23 @@ AM.manualLogin = function(user, pass, callback)
 	});
 }
 
+AM.manualLoginWithType = function(user, pass, usertype, callback)
+{
+	AM.accounts.findOne({user:user,usertype:usertype}, function(e, o) {
+		if (o == null){
+			callback('user-not-found');
+		}	else{
+			bcrypt.compare(pass, o.pass, function(err, res) {
+				if (res){
+					callback(null, o);
+				}	else{
+					callback('invalid-password');
+				}
+			});
+		}
+	});
+}
+
 // record insertion, update & deletion methods //
 
 AM.signup = function(newData, callback)
