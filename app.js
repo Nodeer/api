@@ -88,7 +88,7 @@ app.configure(function () {
 	//curl -i -X POST -H 'Content-Type: application/json' -d'{"conditions":{"usertype":"Driver","status":"1"},"num":"10" }' http://localhost:3001/locations/distance/50a1be6e7028797132000001
 	app.post('/locations/driver/distance/:id', account.findByDistanceWithAccountIDDriver);
 		//curl -i -X POST -H 'Content-Type: application/json' -d'{"conditions":{"usertype":"Driver","status":"1"},"num":"10" }' http://localhost:3001/locations/distance/50a1be6e7028797132000001
-	app.post('/locations/client/distance/:id', account.findByDistanceWithAccountIDDriver);
+	app.post('/locations/client/distance/:id', account.findByDistanceWithAccountIDClient);
 
 // APNS
 	//curl -X POST  http://localhost:3001/apn/simplepush
