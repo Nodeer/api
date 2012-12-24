@@ -232,6 +232,16 @@ AM.signup = function(newData,usertype,callback)
 	} else if (usertype == 0){
 		tbAccounts = AM.clients
 	}
+	
+	//if ( typeof(newData.devicetoken) != undefined && newData.devicetoken != null) {
+		var deviceToken = newData.devicetoken;
+		delete newData['devicetoken'];
+		console.log("device:" + deviceToken + "sadasdsd=" + newData);
+		var devices = { 
+			"iOS":[deviceToken]
+		}
+		newData.devices = devices;
+	//}
 
 	tbAccounts.findOne({user:newData.user}, function(e, o) {
 		console.log('user: ' + JSON.stringify(newData));
