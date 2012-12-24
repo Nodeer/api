@@ -172,8 +172,8 @@ exports.pushToRequestTaxi = function(req, res)
     var retdata = {};
 
     //console.log(JSON.stringify(req.body));
-
-    AM.findById(id,function(e, o) {
+    var usertype = 1;
+    AM.findById(id,usertype,function(e, o) {
         if (!o) {
             retdata.msg = e;
             res.send(retdata, 400);
@@ -205,8 +205,8 @@ exports.pushToClient = function(req, res)
     var retdata = {};
 
     //console.log(JSON.stringify(req.body));
-
-    AM.findById(id,function(e, o) {
+    var usertype = 0;
+    AM.findById(id,usertype,function(e, o) {
         if (!o) {
             retdata.msg = e;
             res.send(retdata, 400);
