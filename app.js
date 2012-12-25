@@ -2,6 +2,7 @@ var express = require('express'),
     //account = require('./routes/account');
     account = require('./routes/controllers/accountController');
     apns = require('./routes/controllers/apnController');
+    transaction = require('./routes/controllers/transactionController');
 
 var app = express.createServer();
 //var app = express();
@@ -65,10 +66,12 @@ app.configure(function () {
 
 // APNS
 	app.post('/apns/simplepush', apns.simplePush);
-	app.post('/apns/requesttaxi/:id', apns.pushToRequestTaxi);
-	app.post('/apns/respondclient/:id', apns.pushToClient);
-	app.post('/apns/arrivalnotify/:id', apns.pushToClient);
+	app.post('/apns/requesttaxi/:id', apns.pushToDrivers);
+	app.post('/apns/respondclient/:id', apns.pushToClients);
+	app.post('/apns/arrivalnotify/:id', apns.pushToClients);
 	
+// TEST
+	app.post('/test/:id', transaction.requestDrivers);
 //app.listen(3001);
 
 app.listen(process.env.PORT || process.env.VCAP_APP_PORT || 3001, function(){

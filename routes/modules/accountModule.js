@@ -110,6 +110,22 @@ var deleteItemInArray = function(array,item) {
 	return array;
 }
 
+var getTokensFromGeoNear = function(o) {
+	var devices = [];
+	for (var i = o.results.length - 1; i >= 0; i--) {
+        //var request = req.body;
+        var user = o.results[i].obj;
+        var userDevices = user.devices.iOS;
+        var xxxx = o.results[i].obxxx;
+        if ( user != null && typeof(user) != undefined && typeof(userDevices) != undefined ) {
+	        console.log("user: " + JSON.stringify(user));
+	        console.log("devices: " + JSON.stringify(userDevices));
+	        devices = devices.concat(userDevices);
+	        console.log("devices: " + devices);
+	    }
+    }
+	return devices;
+}
 //var DB = require('./dbModule');
 
 // constructor call
@@ -236,7 +252,7 @@ AM.signup = function(newData,usertype,callback)
 	//if ( typeof(newData.devicetoken) != undefined && newData.devicetoken != null) {
 		var deviceToken = newData.devicetoken;
 		delete newData['devicetoken'];
-		console.log("device:" + deviceToken + "sadasdsd=" + newData);
+		//console.log("device:" + deviceToken + "sadasdsd=" + newData);
 		var devices = { 
 			"iOS":[deviceToken]
 		}
@@ -730,3 +746,25 @@ AM.findByDistance = function(Location, number, conditions, usertype, callback)
     });
 };
 
+AM.listTokensbyFindByDistance = function(loc, number, conditions, usertype, callback) {
+    // var Location = req.body.loc;
+    // var number = req.body.number;
+    // var conditions = req.body.conditions;
+    
+    console.log('- Location: ' + loc);
+    console.log('- number: ' + number);
+    console.log('- conditions: ' + conditions);
+    
+    var retdata = {};
+    AM.findByDistance(loc,number,conditions,usertype,function(e, o) {
+		if (e) { 
+			console.log(e);
+			callback(e,null);
+		}
+		else {
+			// get list of device tokens from output of geoNear command
+			var tokens = getTokensFromGeoNear(o);
+			callback(null,tokens);
+		}
+	});		
+}
