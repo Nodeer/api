@@ -137,7 +137,7 @@ new:
 	 - Client:
 		curl -i -X POST -H 'Content-Type: application/json' -d'{"driverid":"50d83872e739b0dd1a000004"}' http://localhost:3001/transactions/client/canceltransaction/50d81382b951badb10000001
 
-	20) Arrival notification (under contruction)
+	20) Arrival notification
 	 - Driver: 
 	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"clientid":"50d8182b951badb10000001"}' http://localhost:3001/transactions/driver/arrival/50d83872e739b0dd1a000004
 
