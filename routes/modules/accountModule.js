@@ -616,16 +616,30 @@ AM.updateStatus = function(id, Status, usertype, callback)
   	console.log('current time: ' + jsonDate); 
   	console.log(JSON.stringify(info));
 	
-	tbAccounts.find(function(e, o){
-        tbAccounts.update({'_id':new BSON.ObjectID(id)}, {$set: info}, {safe:true}, function(e, o) {
-            if (e) {
-            	console.log(e);
-				callback(e,null);
-            } else {
-                callback(null,o);
-            }
-        });
+
+	tbAccounts.findOne({_id: this.getObjectId(id,usertype)}, function(e, o) {
+		if (e) {
+        	console.log(e);
+			callback(e,null);
+    	} else {
+    		o.uptime = jsonDate;
+    		o.status = Status;
+    		tbAccounts.save(o);
+        	//console.log("--xxxxxxxxxxx-" + o);
+            callback(null,o);
+        }
     });
+
+	// tbAccounts.find(function(e, o){
+ //        tbAccounts.update({'_id':new BSON.ObjectID(id)}, {$set: info}, {safe:true}, function(e, o) {
+ //            if (e) {
+ //            	console.log(e);
+	// 			callback(e,null);
+ //            } else {
+ //                callback(null,o);
+ //            }
+ //        });
+ //    });
 }
 
 AM.freeUpdate = function(newData, usertype, callback)

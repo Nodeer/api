@@ -58,7 +58,12 @@ exports.requestDrivers = function(req, res) {
 			// send notification to desired drivers
 			var pushContents = {};
 			pushContents.alert = "Client request pick up";
-			pushContents.payload = {"clientID":id};
+			pushContents.payload = {
+				'clientid':id,
+				'type':aigoDefine.notificationType['requestDriver'],
+			};
+
+			
 			var info = o.info;
 			apns.pushInfo_Drivers(pushContents,info,function(e, o) {
                 if (e) {
@@ -148,7 +153,10 @@ exports.cancelTransactionClient = function(req, res) {
 				}	else {
 					var pushContents = {};
 					pushContents.alert = "Client cancel transaction";
-					pushContents.payload = {"clientID":clientID};
+					pushContents.payload = {
+						'clientid':clientID,
+						'type':aigoDefine.notificationType['cancelTransaction'],
+					};
 					tokens = o.devices.iOS;
 					apns.push_Drivers(pushContents,tokens,function(e, o) {
 			            if (e) {
@@ -212,7 +220,10 @@ exports.cancelTransactionDriver = function(req, res) {
 				}	else {
 					var pushContents = {};
 					pushContents.alert = "Driver cancel transaction";
-					pushContents.payload = {"driverID":driverID};
+					pushContents.payload = {
+						'driverid':driverID,
+						'type':aigoDefine.notificationType['cancelTransaction'],
+					};
 					tokens = o.devices.iOS;
 					apns.push_Clients(pushContents,tokens,function(e, o) {
 			            if (e) {
@@ -282,7 +293,10 @@ exports.acceptRequestDriver = function(req, res) {
 				}	else {
 					var pushContents = {};
 					pushContents.alert = "Driver accept transaction";
-					pushContents.payload = {"driverID":driverID};
+					pushContents.payload = {
+						'driverid':driverID,
+						'type':aigoDefine.notificationType['acceptClient'],
+					};
 					tokens = o.devices.iOS;
 					apns.push_Clients(pushContents,tokens,function(e, o) {
 			            if (e) {
@@ -346,7 +360,10 @@ exports.arrivalNotification = function(req, res) {
 				}	else {
 					var pushContents = {};
 					pushContents.alert = "Driver arrival notification";
-					pushContents.payload = {"driverID":driverID};
+					ushContents.payload = {
+						'driverid':driverID,
+						'type':aigoDefine.notificationType['arrivalClient'],
+					};
 					tokens = o.devices.iOS;
 					apns.push_Clients(pushContents,tokens,function(e, o) {
 			            if (e) {

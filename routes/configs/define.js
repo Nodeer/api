@@ -23,15 +23,15 @@ exports.status = {
 	'accepted': "3",
 	'arrival': "4",
 	'pickedUp': "5",
+	'finished': "6",
 };
 
-exports.taxiChargeRate = {
-	'default': 1000,
-	'online': "1",
-	'requesting': "2",
-	'accepted': "3",
-	'arrival': "4",
-	'pickedUp': "5",
+exports.notificationType = {
+	'requestDriver': "1",
+	'acceptClient':  "2",
+	'cancelTransaction': "3",
+	'cancelRequest': "4",
+	'arrivalClient': "5",
 };
 
 exports.taxiSpeed = {

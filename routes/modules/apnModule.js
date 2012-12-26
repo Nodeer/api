@@ -174,11 +174,14 @@ APNM.pushInfo_Drivers = function(req, info, callback)
      //  note.device = device;   
     //note.device = myDevice;
     var tokens = info.devices;
+    var alert = note.alert;
     for (var i = tokens.length - 1; i >= 0; i--) {
         var token = tokens[i];
         var dist = info.dist[token];
-        note.alert = note.alert + "Distance: " + dist + " kms";
-        console.log('xxxxxxxxxxxxxxxxxxxx:' + token + "dist:"  + note.alert);
+        note.alert = alert + "Distance: " + dist + " kms.";
+        note.payload.distance = dist;
+        note.payload.duration = "15";
+        console.log('xxxxxxxxxxxxxxxxxxxx:' + token + "dist:"  + note.alert + "payload:" + JSON.stringify(note.payload));
         var device = new apns.Device(token);
         apnsConnection_Driver.sendNotification(note.clone(device));
     }
