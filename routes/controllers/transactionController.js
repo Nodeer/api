@@ -321,3 +321,67 @@ exports.acceptRequestDriver = function(req, res) {
 		}
 	});	
 }
+
+// Driver notification arrival
+exports.arrivalNotification = function(req, res) {
+
+	var driverID = req.params.id;
+	var clientID = req.body.clientid;
+  
+    var retdata = {};
+    var usertype = 0;
+	AM.findById(clientID,usertype,function(e, o) {
+		if (e) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else if (o.status == "3") {
+			var Status = "4";
+			o.status = Status;
+			o.transaction = driverID;
+			AM.saveData(o,usertype,function(e, o) {
+			//AM.updateStatus(id,Status,usertype,function(e, o) {
+				if (e) {
+					retdata.msg = e;
+					res.send(retdata, 400);
+				}	else {
+					var pushContents = {};
+					pushContents.alert = "Driver arrival notification";
+					pushContents.payload = {"driverID":driverID};
+					tokens = o.devices.iOS;
+					apns.push_Clients(pushContents,tokens,function(e, o) {
+			            if (e) {
+			                retdata.msg = e;
+							res.send(retdata, 400);
+			            } else {
+			            	// update status for Driver
+			            	var usertype = 1;
+							AM.findById(driverID,usertype,function(e, o) {
+								if (e) {
+									retdata.msg = e;
+									res.send(retdata, 400);
+								}	else {
+									var Status = "4";
+									o.status = Status;
+									o.transaction = clientID;
+									AM.saveData(o,usertype,function(e, o) {
+										if (e) {
+							                retdata.msg = e;
+											res.send(retdata, 400);
+										} else {
+											retdata = o;
+											retdata.msg = 'ok';
+											res.send(retdata, 200);
+										}
+									});
+								}
+							});
+						}
+					});
+				}
+			});		
+		} else {
+			retdata.msg = "Client is not available.";
+			res.send(retdata, 400);
+		}
+	});	
+}

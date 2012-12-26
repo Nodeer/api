@@ -79,7 +79,7 @@ app.configure(function () {
 	app.post('/transactions/driver/cancel/:id', transaction.cancelTransactionDriver);
 	app.post('/transactions/client/cancelrequest/:id', transaction.cancelRequestClient);
 	app.post('/transactions/client/canceltransaction/:id', transaction.cancelTransactionClient);
-
+	app.post('/transactions/driver/arrival/:id', transaction.arrivalNotification);
 //app.listen(3001);
 
 app.listen(process.env.PORT || process.env.VCAP_APP_PORT || 3001, function(){
