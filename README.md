@@ -139,6 +139,8 @@ new:
 
 	20) Arrival notification (under contruction)
 	 - Driver: 
+	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"clientid":"50d8182b951badb10000001"}' http://localhost:3001/transactions/driver/arrival/50d83872e739b0dd1a000004
+
 	 		
 
 
