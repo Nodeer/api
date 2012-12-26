@@ -537,6 +537,18 @@ AM.freeUpdate = function(newData, usertype, callback)
 	});
 }
 
+
+AM.saveData = function(newData, usertype, callback)
+{
+	var tbAccounts = AM.accounts;
+	if (usertype == 1) {
+		tbAccounts = AM.drivers;
+	} else if (usertype == 0){
+		tbAccounts = AM.clients;
+	}
+	tbAccounts.save(newData); callback(null,newData);
+}
+
 AM.addDeviceToken = function(id,deviceToken,usertype,callback)
 {
 	var tbAccounts = AM.accounts;

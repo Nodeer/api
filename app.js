@@ -72,6 +72,14 @@ app.configure(function () {
 	
 // TEST
 	app.post('/test/:id', transaction.requestDrivers);
+
+// TRANSACTON
+	app.post('/transactions/client/request/:id', transaction.requestDrivers);
+	app.post('/transactions/driver/accept/:id', transaction.acceptRequestDriver);
+	app.post('/transactions/driver/cancel/:id', transaction.cancelTransactionDriver);
+	app.post('/transactions/client/cancelrequest/:id', transaction.cancelRequestClient);
+	app.post('/transactions/client/canceltransaction/:id', transaction.cancelTransactionClient);
+
 //app.listen(3001);
 
 app.listen(process.env.PORT || process.env.VCAP_APP_PORT || 3001, function(){

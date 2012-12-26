@@ -103,16 +103,46 @@ api for taxi
  - Client: 
  	curl -i -X POST -H 'Content-Type: application/json' -d'{"number":"10", "conditions":{"status":"0"} }' http://localhost:3001/locations/driver/distance/50d7c10fdc9db30000000002
 
-15) Request taxi
- - Client: 
- 	curl -X POST  -H 'Content-Type: application/json' -d'{"alert" : { "body" : "Bob wants to play poker", "action-loc-key" : "Reject" },"badge":"0"}' http://localhost:3001/apns/requesttaxi/50d7c0b7dc9db30000000001
-	
-16) Respond accept to client
- - Driver: 
- 	curl -X POST  -H 'Content-Type: application/json' -d'{"alert" : { "body" : "Got taxi", "action-loc-key" : "Reject" },"badge":"0"}' http://localhost:3001/apns/respondclient/50d7c10fdc9db30000000002
+old: 
+	15) Request taxi
+	 - Client: 
+	 	curl -X POST  -H 'Content-Type: application/json' -d'{"alert" : { "body" : "Bob wants to play poker", "action-loc-key" : "Reject" },"badge":"0"}' http://localhost:3001/apns/requesttaxi/50d7c0b7dc9db30000000001
+		
+	16) Respond accept to client
+	 - Driver: 
+	 	curl -X POST  -H 'Content-Type: application/json' -d'{"alert" : { "body" : "Got taxi", "action-loc-key" : "Reject" },"badge":"0"}' http://localhost:3001/apns/respondclient/50d7c10fdc9db30000000002
 
-17) Arrival notification:
- - Driver: 
- 	curl -X POST  -H 'Content-Type: application/json' -d'{"alert" : { "body" : "Arrival notification", "action-loc-key" : "Reject" },"badge":"0"}' http://localhost:3001/apns/arrivalnotify/50d7c10fdc9db30000000002	
+	17) Arrival notification:
+	 - Driver: 
+	 	curl -X POST  -H 'Content-Type: application/json' -d'{"alert" : { "body" : "Arrival notification", "action-loc-key" : "Reject" },"badge":"0"}' http://localhost:3001/apns/arrivalnotify/50d7c10fdc9db30000000002	
+
+new: 
+	15) Request taxi
+	 - Client: 
+	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"loc" : [ 106.63896,10.827257 ]}' http://localhost:3001/transactions/client/request/50d81382b951badb10000001
+		
+	16) Respond accept to client
+	 - Driver: 
+	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"clientid":"50d81382b951badb10000001"}' http://localhost:3001/transactions/driver/accept/50d83872e739b0dd1a000004
+
+	17) Driver cancel transaction:
+	 - Driver: 
+		curl -i -X POST -H 'Content-Type: application/json' -d'{"clientid":"50d81382b951badb10000001"}' http://localhost:3001/transactions/driver/cancel/50d83872e739b0dd1a000004
+
+	18) Client cancel transaction after driver accept:
+	 - Client: 
+		curl -i -X POST -H 'Content-Type: application/json' -d'{"loc" : [ 106.63896,10.827257 ]}' http://localhost:3001/transactions/client/transactions/client/cancelrequest/50d81382b951badb10000001
+
+	19) Client cancel requeset before driver accept:
+	 - Client:
+		curl -i -X POST -H 'Content-Type: application/json' -d'{"driverid":"50d83872e739b0dd1a000004"}' http://localhost:3001/transactions/client/canceltransaction/50d81382b951badb10000001
+
+	20) Arrival notification (under contruction)
+	 - Driver: 
+	 		
+
+
+
+
 
 
