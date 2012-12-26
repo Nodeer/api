@@ -597,7 +597,7 @@ exports.updateLocationDriver = function(req, res) {
     var Location = req.body;
     console.log('Updating Location for userID: ' + id); 
     console.log(JSON.stringify(Location));
-    
+
     var retdata = {};
     var usertype = 1;
 	AM.updateLocation(id,Location,usertype,function(e, o) {
@@ -1182,9 +1182,10 @@ exports.findByDistanceClient = function(req, res) {
 // 		- conditions: json condision - "conitions":{"usertype":"Driver","status":"1"}
 exports.findByDistanceWithAccountIDDriver = function(req, res) {
     var id = req.params.id;
-    var conditions = req.body.conditions;
+    //var conditions = req.body.conditions;
     var number = req.body.number;
-    
+    var conditions = {"status":"1"};
+
     console.log('Retrieving accounts by distance: ' + req.body.loc);
     
     var retdata = {};
@@ -1217,9 +1218,10 @@ exports.findByDistanceWithAccountIDDriver = function(req, res) {
 // 		- conditions: json condision - "conitions":{"usertype":"Driver","status":"1"}
 exports.findByDistanceWithAccountIDClient = function(req, res) {
     var id = req.params.id;
-    var conditions = req.body.conditions;
+    //var conditions = req.body.conditions;
     var number = req.body.number;
-    
+    var conditions = {"status":"1"};
+
     console.log('Retrieving accounts by distance: ' + req.body.loc);
     
     var retdata = {};

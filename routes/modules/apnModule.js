@@ -133,6 +133,60 @@ APNM.push_Drivers = function(req, tokens, callback)
     callback(null,note);
 };
 
+APNM.pushInfo_Drivers = function(req, info, callback) 
+{
+    var note = new apns.Notification();
+
+    console.log(JSON.stringify(req) + req.badge);
+
+    note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
+
+    if (req.badge == null || typeof(req.badge) == undefined) {
+       note.badge = 1;
+    } else {
+        note.badge = req.badge;   
+    }
+    if (req.sound == null || typeof(req.sound) == undefined) {
+       note.sound = "ping.aiff";
+    } else {
+        note.sound = req.sound;   
+    }
+    if (req.alert == null || typeof(req.alert) == undefined) {
+       note.alert = "You have a new message";
+    } else {
+        note.alert = req.alert;
+    }
+    if (req.payload == null || typeof(req.payload) == undefined) {
+       note.payload = {'messageFrom': 'Client'};
+    } else {
+        note.payload = req.payload;   
+    }
+
+
+    //note.payload = {'messageFrom': 'Caroline'};
+    //var token = 'aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b590';
+    //if (req.token == null) {
+    //} else {
+    //    token = req.token; 
+    //}
+    console.log('xxxxxxxxxxxxxxxxxxxx:' + info);
+     // var device = new apns.Device(token);
+     //  note.device = device;   
+    //note.device = myDevice;
+    var tokens = info.devices;
+    for (var i = tokens.length - 1; i >= 0; i--) {
+        var token = tokens[i];
+        var dist = info.dist[token];
+        note.alert = note.alert + "Distance: " + dist + " kms";
+        console.log('xxxxxxxxxxxxxxxxxxxx:' + token + "dist:"  + note.alert);
+        var device = new apns.Device(token);
+        apnsConnection_Driver.sendNotification(note.clone(device));
+    }
+
+    //apnsConnection_Driver.sendNotification(note);
+    callback(null,note);
+};
+
 APNM.push_Client = function(req, token, callback) 
 {
     var note = new apns.Notification();

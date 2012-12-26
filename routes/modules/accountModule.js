@@ -116,16 +116,42 @@ var getTokensFromGeoNear = function(o) {
         //var request = req.body;
         var user = o.results[i].obj;
         var userDevices = user.devices.iOS;
-        var xxxx = o.results[i].obxxx;
+        //var xxxx = o.results[i].obxxx;
         if ( user != null && typeof(user) != undefined && typeof(userDevices) != undefined ) {
-	        console.log("user: " + JSON.stringify(user));
-	        console.log("devices: " + JSON.stringify(userDevices));
+	        //console.log("user: " + JSON.stringify(user));
+	        //console.log("devices: " + JSON.stringify(userDevices));
 	        devices = devices.concat(userDevices);
-	        console.log("devices: " + devices);
+	        //console.log("devices: " + devices);
 	    }
     }
 	return devices;
 }
+
+var getInfoFromGeoNear = function(o) {
+	var info = {};
+	info.devices = [];
+	info.dist = [];
+	for (var i = o.results.length - 1; i >= 0; i--) {
+        //var request = req.body;
+        var dist = o.results[i].dis;
+        var user = o.results[i].obj;
+        var userDevices = user.devices.iOS;
+        //var xxxx = o.results[i].obxxx;
+        if ( user != null && typeof(user) != undefined && typeof(userDevices) != undefined ) {
+	        //console.log("user: " + JSON.stringify(user));
+	        //console.log("devices: " + JSON.stringify(userDevices));
+	        info.devices = info.devices.concat(userDevices);
+	        //console.log("devices: " + devices);
+	        if ( dist != null && typeof(dist) != undefined ) {
+	        	for (var j = userDevices.length - 1; j >= 0; j--) {
+	    			info.dist[userDevices[j]] = dist;
+	    		}
+	    	}
+	    }
+    }
+	return info;
+}
+
 //var DB = require('./dbModule');
 
 // constructor call
@@ -439,6 +465,59 @@ AM.findByMultipleFields = function(a, callback)
 	});
 }
 
+// AM.updateLocation_old = function(id, Location, usertype,callback)
+// {
+// 	var tbAccounts = AM.accounts;
+// 	if (usertype == 1) {
+// 		tbAccounts = AM.drivers;
+// 	} else if (usertype == 0){
+// 		tbAccounts = AM.clients;
+// 	}
+
+//     console.log('Updating Location for userID: ' + id); 
+//     console.log(JSON.stringify(Location));
+    
+//     //http://stackoverflow.com/questions/5892569/responding-a-json-object-in-nodejs
+    
+//     var temp = Location.loc;
+//     var loc = [];
+//     if (typeof(Location.loc) == undefined) {
+//     } else if (typeof(Location.loc) == 'string') {
+//     	var temp = temp.split(',');
+//     	var lat = parseFloat(temp[0],10);
+//     	var lon = parseFloat(temp[1],10);
+//     	loc = {"loc" : [ lat,lon ]};
+//     	console.log("--xxxxxxxxxxx-" + loc);
+//     } else {
+//     	loc.loc = temp;
+//     }
+
+//     console.log("--loclcocllcoclclcl-" + loc);
+
+//     var now = new Date();
+// 	var jsonDate = now.toJSON();
+
+// 	var info =  { 
+//       "loc": loc.loc,
+//       "uptime": jsonDate 
+//     };
+  
+//   	console.log('current time: ' + jsonDate); 
+//   	console.log(JSON.stringify(info));
+	
+// 	tbAccounts.find(function(e, o){
+//         tbAccounts.update({'_id':new BSON.ObjectID(id)}, {$set: info}, {safe:true}, function(e, o) {
+//             if (e) {
+//             	console.log(e);
+// 				callback(e,null);
+//             } else {
+//             	console.log("--xxxxxxxxxxx-" + o);
+//                 callback(null,o);
+//             }
+//         });
+//     });
+// }
+
 AM.updateLocation = function(id, Location, usertype,callback)
 {
 	var tbAccounts = AM.accounts;
@@ -453,27 +532,64 @@ AM.updateLocation = function(id, Location, usertype,callback)
     
     //http://stackoverflow.com/questions/5892569/responding-a-json-object-in-nodejs
     
+    var temp = Location.loc;
+    var loc = [];
+    if (typeof(Location.loc) == undefined) {
+    } else if (typeof(Location.loc) == 'string') {
+    	var temp = temp.split(',');
+    	var lat = parseFloat(temp[0],10);
+    	var lon = parseFloat(temp[1],10);
+    	loc = {"loc" : [ lat,lon ]};
+    	console.log("--xxxxxxxxxxx-" + loc);
+    } else {
+    	loc.loc = temp;
+    }
+
+    console.log("--loclcocllcoclclcl-" + loc);
+
     var now = new Date();
 	var jsonDate = now.toJSON();
 
 	var info =  { 
-      "loc": Location.loc, 
-      "uptime": jsonDate, 
+      "loc": loc.loc,
+      "uptime": jsonDate 
     };
   
   	console.log('current time: ' + jsonDate); 
   	console.log(JSON.stringify(info));
 	
-	tbAccounts.find(function(e, o){
-        tbAccounts.update({'_id':new BSON.ObjectID(id)}, {$set: info}, {safe:true}, function(e, o) {
-            if (e) {
-            	console.log(e);
-				callback(e,null);
-            } else {
-                callback(null,o);
-            }
-        });
+
+	tbAccounts.findOne({_id: this.getObjectId(id,usertype)}, function(e, o) {
+		if (e) {
+        	console.log(e);
+			callback(e,null);
+    	} else {
+    		o.uptime = jsonDate;
+    		o.loc = loc.loc;
+    		tbAccounts.save(o);
+        	//console.log("--xxxxxxxxxxx-" + o);
+            callback(null,o);
+        }
     });
+
+   //  tbAccounts.update({'_id':new BSON.ObjectID(id)}, {$set: info}, {safe:true}, function(e, o) {
+   //      if (e) {
+   //      	console.log(e);
+			// callback(e,null);
+   //      } else {
+   //      	tbAccounts.findOne({_id: this.getObjectId(id,usertype)}, function(e, o) {
+   //   			if (e) {
+	  //           	console.log(e);
+			// 		callback(e,null);
+   //          	} else {
+	  //           	console.log("--xxxxxxxxxxx-" + o);
+	  //               callback(null,o);
+	  //           }
+	  //       });
+   //      }
+
+   //  });
+
 }
 
 AM.updateStatus = function(id, Status, usertype, callback)
@@ -775,8 +891,10 @@ AM.listTokensbyFindByDistance = function(loc, number, conditions, usertype, call
 		}
 		else {
 			// get list of device tokens from output of geoNear command
-			var tokens = getTokensFromGeoNear(o);
-			callback(null,tokens);
+			//var tokens = getTokensFromGeoNear(o);
+			console.log('- output:' + JSON.stringify(o));
+			o.info = getInfoFromGeoNear(o);
+			callback(null,o);
 		}
 	});		
 }

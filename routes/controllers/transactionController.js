@@ -2,35 +2,36 @@
     //account = require('./routes/account');
 var    AM = require('../modules/accountModule');
 var    apns = require('../modules/apnModule');
+var    aigoDefine = require('../configs/define');
 
 // Find the closed Driver: return without distance
 // Input:
 //     	- location: {[lon,lat]}
 // 		- number: number of record return
 // 		- conditions: json condision - "conitions":{"usertype":"Driver","status":"1"}
-exports.listTokensbyFindByDistance = function(req, res) {
+// exports.listTokensbyFindByDistance = function(req, res) {
 
-	var Location = req.body.loc;
-    var number = req.body.number;
-    var conditions = req.body.conditions;
+// 	var Location = req.body.loc;
+//     var number = req.body.number;
+//     var conditions = req.body.conditions;
     
-    console.log('- Location: ' + Location);
-    console.log('- number: ' + number);
-    console.log('- conditions: ' + conditions);
+//     console.log('- Location: ' + Location);
+//     console.log('- number: ' + number);
+//     console.log('- conditions: ' + conditions);
     
-    var retdata = {};
-    var usertype = 0;
-	AM.listTokensbyFindByDistance(req.body.loc,number,conditions,usertype,function(e, o) {
-		if (e) {
-			retdata.msg = e;
-			res.send(retdata, 400);
-		}	else {
-			retdata = o;
-			retdata.msg = 'ok';
-			res.send(retdata, 200);
-		}
-	});	
-}
+//     var retdata = {};
+//     var usertype = 0;
+// 	AM.listTokensbyFindByDistance(req.body.loc,number,conditions,usertype,function(e, o) {
+// 		if (e) {
+// 			retdata.msg = e;
+// 			res.send(retdata, 400);
+// 		}	else {
+// 			retdata = o;
+// 			retdata.msg = 'ok';
+// 			res.send(retdata, 200);
+// 		}
+// 	});	
+// }
 
 // Client request Drivers
 exports.requestDrivers = function(req, res) {
@@ -41,7 +42,7 @@ exports.requestDrivers = function(req, res) {
     //var conditions = req.body.conditions;
     
     var number = 10;
-  	var conditions = {"status":"1"};
+  	var conditions = {"status":aigoDefine.status['online']};
     
     console.log('- Location: ' + Location);
     console.log('- number: ' + number);
@@ -58,14 +59,14 @@ exports.requestDrivers = function(req, res) {
 			var pushContents = {};
 			pushContents.alert = "Client request pick up";
 			pushContents.payload = {"clientID":id};
-			tokens = o;
-			apns.push_Drivers(pushContents,tokens,function(e, o) {
+			var info = o.info;
+			apns.pushInfo_Drivers(pushContents,info,function(e, o) {
                 if (e) {
                     retdata.msg = e;
 					res.send(retdata, 400);
                 } else {
 					var usertype = 0;
-					var Status = "2";
+					var Status = aigoDefine.status['requesting'];
 					AM.updateStatus(id,Status,usertype,function(e, o) {
 						if (e) {
 							retdata.msg = e;
@@ -90,8 +91,8 @@ exports.cancelRequestClient = function(req, res) {
     //var number = req.body.number;
     //var conditions = req.body.conditions;
     
-    var number = 10;
-  	var conditions = {"status":"1"};
+   //  var number = 10;
+  	// var conditions = {"status":"1"};
     
     // console.log('- Location: ' + Location);
     // console.log('- number: ' + number);
@@ -99,13 +100,12 @@ exports.cancelRequestClient = function(req, res) {
     
     var retdata = {};
     var usertype = 0;
-    var Status = "1";
+    var Status = aigoDefine.status['online'];
     AM.findById(id,usertype,function(e, o) {
 		if (e) {
 			retdata.msg = e;
 			res.send(retdata, 400);
 		}	else if (o.status == "2") {
-			var Status = "1";
 			o.status = Status;
 			o.transaction = "";
 			AM.saveData(o,usertype,function(e, o) {
@@ -136,8 +136,8 @@ exports.cancelTransactionClient = function(req, res) {
 		if (e) {
 			retdata.msg = e;
 			res.send(retdata, 400);
-		}	else if (o.status == "3") {
-			var Status = "1";
+		}	else if (o.status == aigoDefine.status['accepted']) {
+			var Status = aigoDefine.status['online'];
 			o.status = Status;
 			o.transaction = "";
 			AM.saveData(o,usertype,function(e, o) {
@@ -162,7 +162,7 @@ exports.cancelTransactionClient = function(req, res) {
 									retdata.msg = e;
 									res.send(retdata, 400);
 								}	else {
-									var Status = "1";
+									var Status = aigoDefine.status['online'];
 									o.status = Status;
 									o.transaction = "";
 									AM.saveData(o,usertype,function(e, o) {
@@ -200,8 +200,8 @@ exports.cancelTransactionDriver = function(req, res) {
 		if (e) {
 			retdata.msg = e;
 			res.send(retdata, 400);
-		}	else if (o.status == "3") {
-			var Status = "1";
+		}	else if (o.status == aigoDefine.status['accepted']) {
+			var Status = aigoDefine.status['online'];
 			o.status = Status;
 			o.transaction = "";
 			AM.saveData(o,usertype,function(e, o) {
@@ -226,7 +226,7 @@ exports.cancelTransactionDriver = function(req, res) {
 									retdata.msg = e;
 									res.send(retdata, 400);
 								}	else {
-									var Status = "1";
+									var Status = aigoDefine.status['online'];
 									o.status = Status;
 									o.transaction = "";
 									AM.saveData(o,usertype,function(e, o) {
@@ -270,8 +270,8 @@ exports.acceptRequestDriver = function(req, res) {
 		if (e) {
 			retdata.msg = e;
 			res.send(retdata, 400);
-		}	else if (o.status == "2") {
-			var Status = "3";
+		}	else if (o.status == aigoDefine.status['requesting']) {
+			var Status = aigoDefine.status['accepted'];
 			o.status = Status;
 			o.transaction = driverID;
 			AM.saveData(o,usertype,function(e, o) {
@@ -296,7 +296,7 @@ exports.acceptRequestDriver = function(req, res) {
 									retdata.msg = e;
 									res.send(retdata, 400);
 								}	else {
-									var Status = "3";
+									var Status = aigoDefine.status['accepted'];
 									o.status = Status;
 									o.transaction = clientID;
 									AM.saveData(o,usertype,function(e, o) {
@@ -334,8 +334,8 @@ exports.arrivalNotification = function(req, res) {
 		if (e) {
 			retdata.msg = e;
 			res.send(retdata, 400);
-		}	else if (o.status == "3") {
-			var Status = "4";
+		}	else if (o.status == aigoDefine.status['accepted']) {
+			var Status = aigoDefine.status['arrival'];
 			o.status = Status;
 			o.transaction = driverID;
 			AM.saveData(o,usertype,function(e, o) {
@@ -360,7 +360,7 @@ exports.arrivalNotification = function(req, res) {
 									retdata.msg = e;
 									res.send(retdata, 400);
 								}	else {
-									var Status = "4";
+									var Status = aigoDefine.status['arrival'];
 									o.status = Status;
 									o.transaction = clientID;
 									AM.saveData(o,usertype,function(e, o) {
