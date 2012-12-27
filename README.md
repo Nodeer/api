@@ -24,6 +24,12 @@ exports.notificationType = {
 
 api for taxi:
 
+0) delete account
+ - Driver: 
+ 	curl -i -X POST -H 'Content-Type: application/json' -d'{}' http://localhost:3001/accounts/driver/delete/50d7c0b7dc9db30000000001
+ - Client: 
+ 	curl -i -X POST -H 'Content-Type: application/json' -d'{}' http://localhost:3001/accounts/client/delete/50d7c0b7dc9db30000000001
+
 1) sign up
  - Driver: 
  	curl -i -X POST -H 'Content-Type: application/json' -d'{"name":"drive01","email":"test@aigo.com","user":"driver01","pass":"123456","country":"VN"}' http://localhost:3001/accounts/driver/signup
@@ -53,7 +59,6 @@ api for taxi:
 	curl -X POST -H 'Content-Type: application/json' -d'{"devicetoken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b592"}' http://localhost:3001/accounts/driver/logout/50d7c10fdc9db30000000002
 
 5) get account info
-
  - Driver: 
  	http://localhost:3001/accounts/driver/50d7c0b7dc9db30000000001
  - Client: 
@@ -86,7 +91,6 @@ api for taxi:
 	curl -X POST -H 'Content-Type: application/json' -d'{"user":"client01", "pass":"123456","seat":"8" }' http://localhost:3001/accounts/client/info
 
 9) rating
-
  - Driver: 
 	curl -X POST -H 'Content-Type: application/json' -d'{"like":"0"}' http://localhost:3001/accounts/driver/rating/50d7c0b7dc9db30000000001
 

@@ -394,9 +394,15 @@ AM.saltAndHash = function(pass, callback)
 	});
 }
 
-AM.delete = function(id, callback)
+AM.delete = function(id, usertype, callback)
 {
-	AM.accounts.remove({_id: this.getObjectId(id)}, callback);
+	var tbAccounts = AM.accounts;
+	if (usertype == 1) {
+		tbAccounts = AM.drivers;
+	} else if (usertype == 0){
+		tbAccounts = AM.clients
+	}
+	tbAccounts.remove({_id: this.getObjectId(id)}, callback(null));
 }
 
 // auxiliary methods //

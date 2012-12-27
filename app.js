@@ -17,6 +17,9 @@ app.configure(function () {
 	app.post('/accounts/driver/signup', account.signUpDriver);
 	app.post('/accounts/client/signup', account.signUpClient);
 
+	app.post('/accounts/driver/delete/:id', account.deleteDriver);
+	app.post('/accounts/client/delete/:id', account.deleteClient);
+
 	app.post('/accounts/driver/login', account.loginWithDeviceTokenDriver);
 	app.post('/accounts/client/login', account.loginWithDeviceTokenClient);
 

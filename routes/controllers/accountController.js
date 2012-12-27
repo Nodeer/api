@@ -56,6 +56,41 @@ exports.signUpClient = function(req, res)
 };
 
 
+exports.deleteDriver = function(req, res) 
+{
+
+	var id = req.params.id;
+	var retdata = {};
+	console.log('delete driver: ' + id);
+	AM.delete(id,1,function(e, o) {
+		if (e) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else {
+			//retdata = o;
+			retdata.msg = 'ok';
+			res.send(retdata, 200);
+		}
+	});	
+};
+
+exports.deleteClient = function(req, res) 
+{
+	var id = req.params.id;
+	var retdata = {};
+	console.log('delete client: ' + id);
+	AM.delete(id,0, function(e, o) {
+		if (e) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else {
+			//retdata = o;
+			retdata.msg = 'ok';
+			res.send(retdata, 200);
+		}
+	});	
+};
+
 // exports.login = function(req, res) 
 // {
 // 	console.log('login: ' + req.body.user);
