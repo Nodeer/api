@@ -130,57 +130,6 @@ exports.cancelRequestClient = function(req, res) {
 	});
 }
 
-// Driver begin trip
-exports.beginTripDriver = function(req, res) {
-
-	var driverID = req.params.id;
-	var clientID = req.body.clientid;
-    
-    var retdata = {};
-    var usertype = 0;
-    var Status = aigoDefine.status['pickedUp'];
-    AM.findById(clientID,usertype,function(e, o) {
-		if (e) {
-			retdata.msg = e;
-			res.send(retdata, 400);
-		}	else if (o.status == aigoDefine.status['accepted'] || o.status == aigoDefine.status['arrival']) {
-			o.status = Status;
-			AM.saveData(o,usertype,function(e, o) {
-				if (e) {
-	                retdata.msg = e;
-					res.send(retdata, 400);
-				} else {
-					// update status for Client
-	            	var usertype = 1;
-					AM.findById(driverID,usertype,function(e, o) {
-						if (e) {
-							retdata.msg = e;
-							res.send(retdata, 400);
-						}	else {
-							var Status = aigoDefine.status['pickedUp'];
-							o.status = Status;
-							AM.saveData(o,usertype,function(e, o) {
-								if (e) {
-					                retdata.msg = e;
-									res.send(retdata, 400);
-								} else {
-									retdata = o;
-									retdata.msg = 'ok';
-									res.send(retdata, 200);
-								}
-							});
-						}
-					});
-				}
-			});
-		} else {
-			retdata.msg = "Can not begin trip. Client Status = " + o.status;
-			res.send(retdata, 400);
-		}
-	});
-}
-
-
 // Client Transaction request
 exports.cancelTransactionClient = function(req, res) {
 	var clientID = req.params.id;
@@ -453,3 +402,105 @@ exports.arrivalNotification = function(req, res) {
 		}
 	});	
 }
+
+// Driver begin trip
+exports.beginTripDriver = function(req, res) {
+
+	var driverID = req.params.id;
+	var clientID = req.body.clientid;
+    
+    var retdata = {};
+    var usertype = 0;
+    var Status = aigoDefine.status['pickedUp'];
+    AM.findById(clientID,usertype,function(e, o) {
+		if (e) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else if (o.status == aigoDefine.status['accepted'] || o.status == aigoDefine.status['arrival']) {
+			o.status = Status;
+			AM.saveData(o,usertype,function(e, o) {
+				if (e) {
+	                retdata.msg = e;
+					res.send(retdata, 400);
+				} else {
+					// update status for Client
+	            	var usertype = 1;
+					AM.findById(driverID,usertype,function(e, o) {
+						if (e) {
+							retdata.msg = e;
+							res.send(retdata, 400);
+						}	else {
+							var Status = aigoDefine.status['pickedUp'];
+							o.status = Status;
+							AM.saveData(o,usertype,function(e, o) {
+								if (e) {
+					                retdata.msg = e;
+									res.send(retdata, 400);
+								} else {
+									retdata = o;
+									retdata.msg = 'ok';
+									res.send(retdata, 200);
+								}
+							});
+						}
+					});
+				}
+			});
+		} else {
+			retdata.msg = "Can not begin trip. Client Status = " + o.status;
+			res.send(retdata, 400);
+		}
+	});
+}
+
+
+// Driver begin trip
+exports.finishTripDriver = function(req, res) {
+
+	var driverID = req.params.id;
+	var clientID = req.body.clientid;
+    
+    var retdata = {};
+    var usertype = 0;
+    var Status = aigoDefine.status['finished'];
+    AM.findById(clientID,usertype,function(e, o) {
+		if (e) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else if (o.status == aigoDefine.status['pickedUp']){
+			o.status = Status;
+			AM.saveData(o,usertype,function(e, o) {
+				if (e) {
+	                retdata.msg = e;
+					res.send(retdata, 400);
+				} else {
+					// update status for Client
+	            	var usertype = 1;
+					AM.findById(driverID,usertype,function(e, o) {
+						if (e) {
+							retdata.msg = e;
+							res.send(retdata, 400);
+						}	else {
+							var Status = aigoDefine.status['online'];
+							o.status = Status;
+							AM.saveData(o,usertype,function(e, o) {
+								if (e) {
+					                retdata.msg = e;
+									res.send(retdata, 400);
+								} else {
+									retdata = o;
+									retdata.msg = 'ok';
+									res.send(retdata, 200);
+								}
+							});
+						}
+					});
+				}
+			});
+		} else {
+			retdata.msg = "Can not finish trip. Client Status = " + o.status;
+			res.send(retdata, 400);
+		}
+	});
+}
+

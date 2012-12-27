@@ -164,6 +164,13 @@ new:
 	21) Begin the trip
 	 - Driver: 
 	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"clientid":"50d8182b951badb10000001"}' http://localhost:3001/transactions/driver/begintrip/50d83872e739b0dd1a000004
+
+	22) Finish the trip
+	 - Driver: 
+	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"clientid":"50d81382b951badb10000001"}' http://localhost:3001/transactions/driver/finishtrip/50d83872e739b0dd1a000004
+
+	
+
 	 		
 
 
