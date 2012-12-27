@@ -82,6 +82,7 @@ app.configure(function () {
 	app.post('/transactions/driver/arrival/:id', transaction.arrivalNotification);
 	app.post('/transactions/driver/begintrip/:id', transaction.beginTripDriver); 
 	app.post('/transactions/driver/finishtrip/:id', transaction.finishTripDriver); 
+	app.post('/transactions/client/confirmbill/:id', transaction.confirmBillClient);
 
 //app.listen(3001);
 

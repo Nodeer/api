@@ -423,7 +423,7 @@ exports.beginTripDriver = function(req, res) {
 	                retdata.msg = e;
 					res.send(retdata, 400);
 				} else {
-					// update status for Client
+					// update status for Driver
 	            	var usertype = 1;
 					AM.findById(driverID,usertype,function(e, o) {
 						if (e) {
@@ -454,11 +454,12 @@ exports.beginTripDriver = function(req, res) {
 }
 
 
-// Driver begin trip
+// Driver begin trip + billing
 exports.finishTripDriver = function(req, res) {
 
 	var driverID = req.params.id;
 	var clientID = req.body.clientid;
+	var bill = req.body.bill;
     
     var retdata = {};
     var usertype = 0;
@@ -469,14 +470,83 @@ exports.finishTripDriver = function(req, res) {
 			res.send(retdata, 400);
 		}	else if (o.status == aigoDefine.status['pickedUp']){
 			o.status = Status;
+			o.bill = bill;
 			AM.saveData(o,usertype,function(e, o) {
 				if (e) {
 	                retdata.msg = e;
 					res.send(retdata, 400);
 				} else {
-					// update status for Client
-	            	var usertype = 1;
-					AM.findById(driverID,usertype,function(e, o) {
+					var pushContents = {};
+					pushContents.alert = "Driver billing notification";
+					ushContents.payload = {
+						'driverid':driverID,
+						'type':aigoDefine.notificationType['billing'],
+					};
+					tokens = o.devices.iOS;
+					apns.push_Clients(pushContents,tokens,function(e, o) {
+			            if (e) {
+			                retdata.msg = e;
+							res.send(retdata, 400);
+			            } else {
+			            	// update status for Driver
+			            	var usertype = 1;
+							AM.findById(driverID,usertype,function(e, o) {
+								if (e) {
+									retdata.msg = e;
+									res.send(retdata, 400);
+								}	else {
+									var Status = aigoDefine.status['finished'];
+									o.status = Status;
+									o.bill = bill;
+									AM.saveData(o,usertype,function(e, o) {
+										if (e) {
+							                retdata.msg = e;
+											res.send(retdata, 400);
+										} else {
+											retdata = o;
+											retdata.msg = 'ok';
+											res.send(retdata, 200);
+										}
+									});
+								}
+							});
+						}
+					});
+				}
+			});
+		} else {
+			retdata.msg = "Can not finish trip. Client Status = " + o.status;
+			res.send(retdata, 400);
+		}
+	});
+}
+
+// Client confirm bill and close transaction
+exports.confirmBillClient = function(req, res) {
+
+	var clientID = req.params.id;
+	var driverID = req.body.driverid;
+	var bill = req.body.bill;
+    
+ 	//console.log("xxxxxxxxx:" +bill);
+    
+    var retdata = {};
+    var usertype = 1;
+    var Status = aigoDefine.status['online'];
+    AM.findById(driverID,usertype,function(e, o) {
+		if (e) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else if (o.status == aigoDefine.status['finished']) {
+			o.status = Status;
+			AM.saveData(o,usertype,function(e, o) {
+				if (e) {
+	                retdata.msg = e;
+					res.send(retdata, 400);
+				} else {
+					// update status for Driver
+	            	var usertype = 0;
+					AM.findById(clientID,usertype,function(e, o) {
 						if (e) {
 							retdata.msg = e;
 							res.send(retdata, 400);
@@ -498,9 +568,8 @@ exports.finishTripDriver = function(req, res) {
 				}
 			});
 		} else {
-			retdata.msg = "Can not finish trip. Client Status = " + o.status;
+			retdata.msg = "Can not confirm bill. Driver Status = " + o.status;
 			res.send(retdata, 400);
 		}
 	});
 }
-

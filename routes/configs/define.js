@@ -32,6 +32,7 @@ exports.notificationType = {
 	'cancelTransaction': "3",
 	'cancelRequest': "4",
 	'arrivalClient': "5",
+	'billing': "6",
 };
 
 exports.taxiSpeed = {

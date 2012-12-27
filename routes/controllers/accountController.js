@@ -1092,7 +1092,8 @@ exports.findByDistanceDriver = function(req, res) {
 
 	var Location = req.body.loc;
     var number = req.body.number;
-    var conditions = req.body.conditions;
+    //var conditions = req.body.conditions;
+    var conditions = {"status":"1"};
     
     console.log('- Location: ' + Location);
     console.log('- number: ' + number);
@@ -1121,7 +1122,8 @@ exports.findByDistanceClient = function(req, res) {
 
 	var Location = req.body.loc;
     var number = req.body.number;
-    var conditions = req.body.conditions;
+    //var conditions = req.body.conditions;
+	var conditions = {"status":"1"};
     
     console.log('- Location: ' + Location);
     console.log('- number: ' + number);

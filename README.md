@@ -19,6 +19,7 @@ exports.notificationType = {
 	'cancelTransaction': "3",
 	'cancelRequest': "4",
 	'arrivalClient': "5",
+	'billing': "6",
 };
 
 api for taxi:
@@ -63,8 +64,12 @@ api for taxi:
  - Driver: 
 	curl -i -X POST -H 'Content-Type: application/json' -d'{"loc" : [106.6386,10.827257] }' http://localhost:3001/accounts/driver/location/50d7c0b7dc9db30000000001
 
+	curl -i -X POST -H 'Content-Type: application/json' -d'{"loc" : "106.6386,10.827257" }' http://localhost:3001/accounts/driver/location/50d7c0b7dc9db30000000001
+
  - Client: 
 	curl -i -X POST -H 'Content-Type: application/json' -d'{"loc" : [106.6386,11.827257] }' http://localhost:3001/accounts/client/location/50d7c10fdc9db30000000002
+
+	curl -i -X POST -H 'Content-Type: application/json' -d'{"loc" : "106.6386,11.827257" }' http://localhost:3001/accounts/client/location/50d7c10fdc9db30000000002
 
 7) update status
  - Driver: 
@@ -111,17 +116,21 @@ api for taxi:
 
 13) Find closest Driver/Client
  - Driver: 
- 	curl -i -X POST -H 'Content-Type: application/json' -d'{"loc" : [ 106.63896,10.827257 ],"number":"10", "conditions":{"status":"2"} }' http://localhost:3001/locations/driver/distance
+ 	curl -i -X POST -H 'Content-Type: application/json' -d'{"loc" : [ 106.63896,10.827257 ],"number":"10"}' http://localhost:3001/locations/driver/distance
+
+ 	 curl -i -X POST -H 'Content-Type: application/json' -d'{"loc" : "106.63896,10.827257" ,"number":"10"}' http://localhost:3001/locations/driver/distance
 
  - Client: 
- 	curl -i -X POST -H 'Content-Type: application/json' -d'{"loc" : [ 106.6386,10.827257 ],"number":"10", "conditions":{"status":"0"} }' http://localhost:3001/locations/client/distance
+ 	curl -i -X POST -H 'Content-Type: application/json' -d'{"loc" : [ 106.6386,10.827257 ],"number":"10"}' http://localhost:3001/locations/client/distance
+
+ 	curl -i -X POST -H 'Content-Type: application/json' -d'{"loc" : "106.6386,10.827257","number":"10"}' http://localhost:3001/locations/client/distance
 
 14) Find closest Driver/Client with account ID
  - Driver: 
-	curl -i -X POST -H 'Content-Type: application/json' -d'{"number":"10", "conditions":{"status":"0"} }' http://localhost:3001/locations/driver/distance/50d7c0b7dc9db30000000001
+	curl -i -X POST -H 'Content-Type: application/json' -d'{"number":"10"}' http://localhost:3001/locations/driver/distance/50d7c0b7dc9db30000000001
 
  - Client: 
- 	curl -i -X POST -H 'Content-Type: application/json' -d'{"number":"10", "conditions":{"status":"0"} }' http://localhost:3001/locations/client/distance/50d7c10fdc9db30000000002
+ 	curl -i -X POST -H 'Content-Type: application/json' -d'{"number":"10"}' http://localhost:3001/locations/client/distance/50d7c10fdc9db30000000002
 
 old: 
 	15) Request taxi
@@ -165,11 +174,14 @@ new:
 	 - Driver: 
 	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"clientid":"50d8182b951badb10000001"}' http://localhost:3001/transactions/driver/begintrip/50d83872e739b0dd1a000004
 
-	22) Finish the trip
+	22) Finish the trip -> send build notification to client
 	 - Driver: 
-	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"clientid":"50d81382b951badb10000001"}' http://localhost:3001/transactions/driver/finishtrip/50d83872e739b0dd1a000004
-
+	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"clientid":"50d81382b951badb10000001","bill":"100.000"}' http://localhost:3001/transactions/driver/finishtrip/50d83872e739b0dd1a000004
 	
+	23) Confirm bill
+	 - Client: 
+	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"driverid":"50d8372e739b0dd1a000004","bill":"100.000"}' http://localhost:3001/transactions/client/confirmbill/50d81382b951badb10000001
+
 
 	 		
 

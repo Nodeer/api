@@ -858,12 +858,12 @@ AM.findByDistance = function(Location, number, conditions, usertype, callback)
 
 	// convert conditions to object
 	var con = conditions;
-	if (typeof conditions !== 'object') {
+	if (typeof(conditions) != 'object') {
 		con = JSON.parse(conditions);
 	}
 	
 	var loc = Location;
-	if (typeof conditions !== 'object') {
+	if (typeof(conditions) != 'object') {
 		// convert location to array: https://groups.google.com/forum/?fromgroups=#!topic/mongodb-user/Iji6ui_oSdw
 		var locArray = Location.split(",");
 		
