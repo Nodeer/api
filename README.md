@@ -1,7 +1,27 @@
 taxiapi
 =======
 
-api for taxi
+State machine:
+
+exports.status = {
+	'offline': "0",
+	'online': "1",
+	'requesting': "2",
+	'accepted': "3",
+	'arrival': "4",
+	'pickedUp': "5",
+	'finished': "6",
+};
+
+exports.notificationType = {
+	'requestDriver': "1",
+	'acceptClient':  "2",
+	'cancelTransaction': "3",
+	'cancelRequest': "4",
+	'arrivalClient': "5",
+};
+
+api for taxi:
 
 1) sign up
  - Driver: 
@@ -101,7 +121,7 @@ api for taxi
 	curl -i -X POST -H 'Content-Type: application/json' -d'{"number":"10", "conditions":{"status":"0"} }' http://localhost:3001/locations/driver/distance/50d7c0b7dc9db30000000001
 
  - Client: 
- 	curl -i -X POST -H 'Content-Type: application/json' -d'{"number":"10", "conditions":{"status":"0"} }' http://localhost:3001/locations/driver/distance/50d7c10fdc9db30000000002
+ 	curl -i -X POST -H 'Content-Type: application/json' -d'{"number":"10", "conditions":{"status":"0"} }' http://localhost:3001/locations/client/distance/50d7c10fdc9db30000000002
 
 old: 
 	15) Request taxi
@@ -141,6 +161,9 @@ new:
 	 - Driver: 
 	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"clientid":"50d8182b951badb10000001"}' http://localhost:3001/transactions/driver/arrival/50d83872e739b0dd1a000004
 
+	21) Begin the trip
+	 - Driver: 
+	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"clientid":"50d8182b951badb10000001"}' http://localhost:3001/transactions/driver/begintrip/50d83872e739b0dd1a000004
 	 		
 
 
