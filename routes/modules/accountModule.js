@@ -868,16 +868,25 @@ AM.findByDistance = function(Location, number, conditions, usertype, callback)
 		con = JSON.parse(conditions);
 	}
 	
-	var loc = Location;
+	var loc = {};
+	loc.loc = Location;
 	if (typeof(conditions) != 'object') {
 		// convert location to array: https://groups.google.com/forum/?fromgroups=#!topic/mongodb-user/Iji6ui_oSdw
 		var locArray = Location.split(",");
 		
+		var lat = parseFloat(locArray[0],10);
+    	var lon = parseFloat(locArray[1],10);
+    	loc = {"loc" : [ lat,lon ]};
+
 		// convert string to float for lat and lon
-		loc = [parseFloat(locArray[0],10),parseFloat(locArray[1],10)];
+		//var temp = [parseFloat(locArray[0],10),parseFloat(locArray[1],10)];
+		//loc = {"loc": temp};
 	}
 	
-    db.command({geoNear: tbAccounts, near: loc, distanceMultiplier: 3963, spherical: true, num: number,
+	console.log("xxxxxx1=" + typeof(loc) + typeof(loc.loc));
+	console.log("xxxxxx2=" + JSON.stringify(loc.loc));
+	
+    db.command({geoNear: tbAccounts, near: loc.loc, distanceMultiplier: 3963, spherical: true, num: number,
     	query:{
 			$and:[
 					con

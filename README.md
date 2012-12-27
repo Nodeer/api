@@ -152,7 +152,7 @@ old:
 new: 
 	15) Request taxi
 	 - Client: 
-	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"loc" : [ 106.63896,10.827257 ]}' http://localhost:3001/transactions/client/request/50d81382b951badb10000001
+	 	curl -i -X POST -H 'Content-Type: application/json' -d'{}' http://localhost:3001/transactions/client/request/50d81382b951badb10000001
 		
 	16) Respond accept to client
 	 - Driver: 
@@ -164,7 +164,7 @@ new:
 
 	18) Client cancel transaction after driver accept:
 	 - Client: 
-		curl -i -X POST -H 'Content-Type: application/json' -d'{"loc" : [ 106.63896,10.827257 ]}' http://localhost:3001/transactions/client/transactions/client/cancelrequest/50d81382b951badb10000001
+		curl -i -X POST -H 'Content-Type: application/json' -d'{}' http://localhost:3001/transactions/client/transactions/client/cancelrequest/50d81382b951badb10000001
 
 	19) Client cancel requeset before driver accept:
 	 - Client:

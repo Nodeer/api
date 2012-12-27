@@ -36,7 +36,7 @@ var    aigoDefine = require('../configs/define');
 // Client request Drivers
 exports.requestDrivers = function(req, res) {
 
-	var id = req.params.id;
+	var clientID = req.params.id;
 	var Location = req.body.loc;
     //var number = req.body.number;
     //var conditions = req.body.conditions;
@@ -50,42 +50,47 @@ exports.requestDrivers = function(req, res) {
     
     var retdata = {};
     var usertype = 0;
-	AM.listTokensbyFindByDistance(req.body.loc,number,conditions,usertype,function(e, o) {
+    AM.findById(clientID,usertype,function(e, o) {
 		if (e) {
 			retdata.msg = e;
 			res.send(retdata, 400);
 		}	else {
-			// send notification to desired drivers
-			var pushContents = {};
-			pushContents.alert = "Client request pick up";
-			pushContents.payload = {
-				'clientid':id,
-				'type':aigoDefine.notificationType['requestDriver'],
-			};
-
-			
-			var info = o.info;
-			apns.pushInfo_Drivers(pushContents,info,function(e, o) {
-                if (e) {
-                    retdata.msg = e;
+			AM.listTokensbyFindByDistance(o.loc,number,conditions,usertype,function(e, o) {
+				if (e) {
+					retdata.msg = e;
 					res.send(retdata, 400);
-                } else {
-					var usertype = 0;
-					var Status = aigoDefine.status['requesting'];
-					AM.updateStatus(id,Status,usertype,function(e, o) {
-						if (e) {
-							retdata.msg = e;
+				}	else {
+					// send notification to desired drivers
+					var pushContents = {};
+					pushContents.alert = "Client request pick up";
+					pushContents.payload = {
+						'clientid':clientID,
+						'type':aigoDefine.notificationType['requestDriver'],
+					};					
+					var info = o.info;
+					apns.pushInfo_Drivers(pushContents,info,function(e, o) {
+		                if (e) {
+		                    retdata.msg = e;
 							res.send(retdata, 400);
-						}	else {
-							retdata = o;
-							retdata.msg = 'ok';
-							res.send(retdata, 200);
-						}
-					});	
-                }  
-            });	
+		                } else {
+							var usertype = 0;
+							var Status = aigoDefine.status['requesting'];
+							AM.updateStatus(clientID,Status,usertype,function(e, o) {
+								if (e) {
+									retdata.msg = e;
+									res.send(retdata, 400);
+								}	else {
+									retdata = o;
+									retdata.msg = 'ok';
+									res.send(retdata, 200);
+								}
+							});	
+		                }  
+		            });	
+				}
+			});	
 		}
-	});	
+	});
 }
 
 // Client cancel request
