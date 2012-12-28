@@ -770,7 +770,7 @@ exports.updateStatusClient = function(req, res) {
 //     	- device token for APNS
 exports.addDeviceTokenDriver = function(req, res) {
     var id = req.params.id;
-    var deviceToken = req.body.deviceToken;
+    var deviceToken = req.body.devicetoken;
     console.log('Add device token: ' + id); 
     
     var retdata = {};
@@ -793,7 +793,7 @@ exports.addDeviceTokenDriver = function(req, res) {
 //     	- device token for APNS
 exports.addDeviceTokenClient = function(req, res) {
     var id = req.params.id;
-    var deviceToken = req.body.deviceToken;
+    var deviceToken = req.body.devictoken;
     console.log('Add device token: ' + id); 
     
     var retdata = {};
@@ -838,7 +838,7 @@ exports.addDeviceTokenClient = function(req, res) {
 //     	- device token for APNS
 exports.deleteDeviceTokenDriver = function(req, res) {
     var id = req.params.id;
-    var deviceToken = req.body.deviceToken;
+    var deviceToken = req.body.devicetoken;
     console.log('Delete device token: ' + id); 
     
     var retdata = {};
@@ -861,7 +861,7 @@ exports.deleteDeviceTokenDriver = function(req, res) {
 //     	- device token for APNS
 exports.deleteDeviceTokenClient = function(req, res) {
     var id = req.params.id;
-    var deviceToken = req.body.deviceToken;
+    var deviceToken = req.body.devicetoken;
     console.log('Delete device token: ' + id); 
     
     var retdata = {};
@@ -908,8 +908,8 @@ exports.deleteDeviceTokenClient = function(req, res) {
 //     	- device token for APNS
 exports.updateDeviceTokenDriver = function(req, res) {
     var id = req.params.id;
-    var deviceToken = req.body.deviceToken;
-    var olddeviceToken = req.body.oldDeviceToken;
+    var deviceToken = req.body.devicetoken;
+    var olddeviceToken = req.body.olddeviceroken;
     console.log('Driver Update device token: ' + id + "new:" + deviceToken + "old:" + olddeviceToken); 
     
     var retdata = {};
@@ -933,8 +933,8 @@ exports.updateDeviceTokenDriver = function(req, res) {
 //     	- device token for APNS
 exports.updateDeviceTokenClient = function(req, res) {
     var id = req.params.id;
-    var deviceToken = req.body.deviceToken;
-    var olddeviceToken = req.body.oldDeviceToken;
+    var deviceToken = req.body.devicetoken;
+    var olddeviceToken = req.body.olddevicetoken;
     console.log('Clietn Update device token: ' + id + "new:" + deviceToken + "old:" + olddeviceToken); 
     
     var retdata = {};

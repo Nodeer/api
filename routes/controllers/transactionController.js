@@ -66,7 +66,7 @@ exports.requestDrivers = function(req, res) {
 					pushContents.payload = {
 						'clientid':clientID,
 						'type':aigoDefine.notificationType['requestDriver'],
-					};					
+					};						
 					var info = o.info;
 					apns.pushInfo_Drivers(pushContents,info,function(e, o) {
 		                if (e) {
@@ -365,7 +365,7 @@ exports.arrivalNotification = function(req, res) {
 				}	else {
 					var pushContents = {};
 					pushContents.alert = "Driver arrival notification";
-					ushContents.payload = {
+					pushContents.payload = {
 						'driverid':driverID,
 						'type':aigoDefine.notificationType['arrivalClient'],
 					};
@@ -464,7 +464,7 @@ exports.finishTripDriver = function(req, res) {
 
 	var driverID = req.params.id;
 	var clientID = req.body.clientid;
-	var bill = req.body.bill;
+	var price = req.body.price;
     
     var retdata = {};
     var usertype = 0;
@@ -475,7 +475,7 @@ exports.finishTripDriver = function(req, res) {
 			res.send(retdata, 400);
 		}	else if (o.status == aigoDefine.status['pickedUp']){
 			o.status = Status;
-			o.bill = bill;
+			o.price = price;
 			AM.saveData(o,usertype,function(e, o) {
 				if (e) {
 	                retdata.msg = e;
@@ -483,9 +483,10 @@ exports.finishTripDriver = function(req, res) {
 				} else {
 					var pushContents = {};
 					pushContents.alert = "Driver billing notification";
-					ushContents.payload = {
+					pushContents.payload = {
 						'driverid':driverID,
 						'type':aigoDefine.notificationType['billing'],
+						'price':price,
 					};
 					tokens = o.devices.iOS;
 					apns.push_Clients(pushContents,tokens,function(e, o) {
@@ -502,7 +503,7 @@ exports.finishTripDriver = function(req, res) {
 								}	else {
 									var Status = aigoDefine.status['finished'];
 									o.status = Status;
-									o.bill = bill;
+									o.price = price;
 									AM.saveData(o,usertype,function(e, o) {
 										if (e) {
 							                retdata.msg = e;
@@ -531,7 +532,7 @@ exports.confirmBillClient = function(req, res) {
 
 	var clientID = req.params.id;
 	var driverID = req.body.driverid;
-	var bill = req.body.bill;
+	var price = req.body.price;
     
  	//console.log("xxxxxxxxx:" +bill);
     

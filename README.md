@@ -99,24 +99,24 @@ api for taxi:
 
 10) Add device token
  - Driver: 
-	curl -X POST -H 'Content-Type: application/json' -d'{"deviceToken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b592"}' http://localhost:3001/accounts/driver/adddevicetoken/50d7c0b7dc9db30000000001
+	curl -X POST -H 'Content-Type: application/json' -d'{"devicetoken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b592"}' http://localhost:3001/accounts/driver/adddevicetoken/50d7c0b7dc9db30000000001
 
  - Client: 
- 	curl -X POST -H 'Content-Type: application/json' -d'{"deviceToken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b592"}' http://localhost:3001/accounts/client/adddevicetoken/50d7c10fdc9db30000000002
+ 	curl -X POST -H 'Content-Type: application/json' -d'{"devicetoken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b592"}' http://localhost:3001/accounts/client/adddevicetoken/50d7c10fdc9db30000000002
 
 11) delete device token
  - Driver: 
-	curl -X POST -H 'Content-Type: application/json' -d'{"deviceToken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b592"}' http://localhost:3001/accounts/driver/deletedevicetoken/50d7c0b7dc9db30000000001
+	curl -X POST -H 'Content-Type: application/json' -d'{"devicetoken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b592"}' http://localhost:3001/accounts/driver/deletedevicetoken/50d7c0b7dc9db30000000001
 
  - Client: 
-	curl -X POST -H 'Content-Type: application/json' -d'{"deviceToken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b592"}' http://localhost:3001/accounts/client/deletedevicetoken/50d7c10fdc9db30000000002
+	curl -X POST -H 'Content-Type: application/json' -d'{"devicetoken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b592"}' http://localhost:3001/accounts/client/deletedevicetoken/50d7c10fdc9db30000000002
 
 12) update device token
  - Driver: 
-	curl -X POST -H 'Content-Type: application/json' -d'{"deviceToken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b591","oldDeviceToken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b592"}' http://localhost:3001/accounts/driver/updatedevicetoken/50d7c0b7dc9db30000000001
+	curl -X POST -H 'Content-Type: application/json' -d'{"devicetoken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b591","olddevicetoken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b592"}' http://localhost:3001/accounts/driver/updatedevicetoken/50d7c0b7dc9db30000000001
 
  - Client: 
- 	curl -X POST -H 'Content-Type: application/json' -d'{"deviceToken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b592","oldDeviceToken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b591"}' http://localhost:3001/accounts/client/updatedevicetoken/50d7c10fdc9db30000000002
+ 	curl -X POST -H 'Content-Type: application/json' -d'{"devicetoken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b592","olddevicetoken":"aeace73a24a233cc75640cb2c72177d6542b51bfbd01e354b8a6f3ce59f0b591"}' http://localhost:3001/accounts/client/updatedevicetoken/50d7c10fdc9db30000000002
 
 13) Find closest Driver/Client
  - Driver: 
@@ -180,11 +180,11 @@ new:
 
 	22) Finish the trip -> send build notification to client
 	 - Driver: 
-	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"clientid":"50d81382b951badb10000001","bill":"100.000"}' http://localhost:3001/transactions/driver/finishtrip/50d83872e739b0dd1a000004
+	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"clientid":"50d81382b951badb10000001","price":"100.000"}' http://localhost:3001/transactions/driver/finishtrip/50d83872e739b0dd1a000004
 	
 	23) Confirm bill
 	 - Client: 
-	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"driverid":"50d8372e739b0dd1a000004","bill":"100.000"}' http://localhost:3001/transactions/client/confirmbill/50d81382b951badb10000001
+	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"driverid":"50d8372e739b0dd1a000004","price":"100.000"}' http://localhost:3001/transactions/client/confirmbill/50d81382b951badb10000001
 
 
 	 		
