@@ -133,8 +133,8 @@ api for taxi:
  - Driver: 
 	curl -i -X POST -H 'Content-Type: application/json' -d'{"number":"10"}' http://localhost:3001/locations/driver/distance/50d7c0b7dc9db30000000001
 
- - Client: 
- 	curl -i -X POST -H 'Content-Type: application/json' -d'{"number":"10"}' http://localhost:3001/locations/client/distance/50d7c10fdc9db30000000002
+ - Client: Seat = 4,8 or 0 (all)
+ 	curl -i -X POST -H 'Content-Type: application/json' -d'{"number":"10","set":"8"}' http://localhost:3001/locations/client/distance/50d81382b951badb10000001
 
 old: 
 	15) Request taxi

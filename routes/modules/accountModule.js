@@ -886,7 +886,7 @@ AM.findByDistance = function(Location, number, conditions, usertype, callback)
 	console.log("xxxxxx1=" + typeof(loc) + typeof(loc.loc));
 	console.log("xxxxxx2=" + JSON.stringify(loc.loc));
 	
-    db.command({geoNear: tbAccounts, near: loc.loc, distanceMultiplier: 3963, spherical: true, num: number,
+    db.command({geoNear: tbAccounts, near: loc.loc, distanceMultiplier: 3963, spherical: true, num: number, maxDistance : 10/3963,
     	query:{
 			$and:[
 					con

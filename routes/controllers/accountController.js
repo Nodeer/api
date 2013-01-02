@@ -1,7 +1,7 @@
 //var express = require('express'),
     //account = require('./routes/account');
 var    AM = require('../modules/accountModule');
-
+var    aigoDefine = require('../configs/define');
 //var app = express.createServer();
 
 
@@ -179,7 +179,7 @@ exports.loginWithDeviceTokenDriver = function(req, res)
 			var id = o._id.toHexString();
 			//id = '50a1be6e7028797132000001';
 			console.log('login: ' + id);
-			var Status = "1";
+			var Status = aigoDefine.status['online'];
 			AM.updateStatus(id,Status,usertype,function(e, o) {
 				if (e) {
 					retdata.msg = e;
@@ -221,7 +221,7 @@ exports.loginWithDeviceTokenClient= function(req, res)
 			var id = o._id.toHexString();
 			//id = '50a1be6e7028797132000001';
 			console.log('login: ' + id);
-			var Status = "1";
+			var Status = aigoDefine.status['online'];
 			AM.updateStatus(id,Status,usertype,function(e, o) {
 				if (e) {
 					retdata.msg = e;
@@ -1128,7 +1128,7 @@ exports.findByDistanceDriver = function(req, res) {
 	var Location = req.body.loc;
     var number = req.body.number;
     //var conditions = req.body.conditions;
-    var conditions = {"status":"1"};
+    var conditions = {"status":aigoDefine.status['online']};
     
     console.log('- Location: ' + Location);
     console.log('- number: ' + number);
@@ -1157,8 +1157,16 @@ exports.findByDistanceClient = function(req, res) {
 
 	var Location = req.body.loc;
     var number = req.body.number;
-    //var conditions = req.body.conditions;
-	var conditions = {"status":"1"};
+    var seat = req.body.seat;
+    var conditions = {
+    	"status":aigoDefine.status['online']
+    };
+    if (seat != "0") {
+    	conditions = {
+    		"status":aigoDefine.status['online'],
+    		"seat":seat
+    	};
+    }	
     
     console.log('- Location: ' + Location);
     console.log('- number: ' + number);
@@ -1221,7 +1229,7 @@ exports.findByDistanceWithAccountIDDriver = function(req, res) {
     var id = req.params.id;
     //var conditions = req.body.conditions;
     var number = req.body.number;
-    var conditions = {"status":"1"};
+    var conditions = {"status":aigoDefine.status['online']};
 
     console.log('Retrieving accounts by distance: ' + req.body.loc);
     
@@ -1257,9 +1265,22 @@ exports.findByDistanceWithAccountIDClient = function(req, res) {
     var id = req.params.id;
     //var conditions = req.body.conditions;
     var number = req.body.number;
-    var conditions = {"status":"1"};
+    var seat = req.body.seat;
+    var conditions = {
+    	"status":aigoDefine.status['online']
+    };
+    if (seat != "0") {
+    	conditions = {
+    		"status":aigoDefine.status['online'],
+    		"seat":seat
+    	};
+    }
+    
+    //console.log('- Location: ' + Location);
+    console.log('- number: ' + number);
+    console.log('- conditions: ' + JSON.stringify(conditions));
 
-    console.log('Retrieving accounts by distance: ' + req.body.loc);
+    //console.log('Retrieving accounts by distance: ' + req.body.loc);
     
     var retdata = {};
     var usertype = 0;
