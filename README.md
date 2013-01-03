@@ -186,6 +186,10 @@ new:
 	 - Client: 
 	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"driverid":"50d8372e739b0dd1a000004","price":"100.000"}' http://localhost:3001/transactions/client/confirmbill/50d81382b951badb10000001
 
+	24) Request this taxi
+	 - Client: 
+	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"driverid":"50d7c0b7dc9db3000000001"}' http://localhost:3001/transactions/client/requestthisdriver/50d81382b951badb10000001
+
 
 	 		
 

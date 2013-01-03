@@ -1235,12 +1235,13 @@ exports.findByDistanceWithAccountIDDriver = function(req, res) {
     
     var retdata = {};
     var usertype = 1;
+    var maxDistance = 10/3963;
 	AM.findById(id,usertype,function(e, o) {
 		if (e) {
 			retdata.msg = e;
 			res.send(retdata, 400);
 		}	else {
-			AM.findByDistance(o.loc,number,conditions,usertype,function(e, o) {
+			AM.findByDistance(o.loc,number,conditions,usertype,maxDistance,function(e, o) {
 				if (e) {
 					retdata.msg = e;
 					res.send(retdata, 400);
@@ -1284,12 +1285,13 @@ exports.findByDistanceWithAccountIDClient = function(req, res) {
     
     var retdata = {};
     var usertype = 0;
+    var maxDistance = 10/3963;
 	AM.findById(id,usertype,function(e, o) {
 		if (e) {
 			retdata.msg = e;
 			res.send(retdata, 400);
 		}	else {
-			AM.findByDistance(o.loc,number,conditions,usertype,function(e, o) {
+			AM.findByDistance(o.loc,number,conditions,usertype,maxDistance,function(e, o) {
 				if (e) {
 					retdata.msg = e;
 					res.send(retdata, 400);

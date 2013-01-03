@@ -77,6 +77,7 @@ app.configure(function () {
 	app.post('/test/:id', transaction.requestDrivers);
 
 // TRANSACTON
+	app.post('/transactions/client/requestthisdriver/:id', transaction.requestThisDriver);
 	app.post('/transactions/client/request/:id', transaction.requestDrivers);
 	app.post('/transactions/driver/accept/:id', transaction.acceptRequestDriver);
 	app.post('/transactions/driver/cancel/:id', transaction.cancelTransactionDriver);

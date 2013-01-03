@@ -33,6 +33,72 @@ var    aigoDefine = require('../configs/define');
 // 	});	
 // }
 
+// Client this Drivers
+exports.requestThisDriver = function(req, res) {
+
+	var clientID = req.params.id;
+	var driverID = req.body.driverid;
+	//var Location = req.body.loc;
+    //var number = req.body.number;
+    //var conditions = req.body.conditions;
+    
+    var number = 1;
+    var objectid = AM.getObjectId(driverID,1);
+  	var conditions = {
+  		"status":aigoDefine.status['online'],
+  		"_id":objectid,
+  	};
+    
+    //console.log('- Location: ' + Location);
+    console.log('- number: ' + number);
+    console.log('- conditions: ' + conditions);
+    
+    var retdata = {};
+    var usertype = 0;
+    AM.findById(clientID,usertype,function(e, o) {
+		if (e) {
+			retdata.msg = e;
+			res.send(retdata, 400);
+		}	else {
+			AM.listTokensbyFindByDistance(o.loc,number,conditions,usertype,function(e, o) {
+				if (e) {
+					retdata.msg = e;
+					res.send(retdata, 400);
+				}	else {
+					console.log('- send notification to desired drivers ' + JSON.stringify(o.info));
+					// send notification to desired drivers
+					var pushContents = {};
+					pushContents.alert = "Client request pick up";
+					pushContents.payload = {
+						'clientid':clientID,
+						'type':aigoDefine.notificationType['requestDriver'],
+					};						
+					var info = o.info;
+					apns.pushInfo_Drivers(pushContents,info,function(e, o) {
+		                if (e) {
+		                    retdata.msg = e;
+							res.send(retdata, 400);
+		                } else {
+							var usertype = 0;
+							var Status = aigoDefine.status['requesting'];
+							AM.updateStatus(clientID,Status,usertype,function(e, o) {
+								if (e) {
+									retdata.msg = e;
+									res.send(retdata, 400);
+								}	else {
+									retdata = o;
+									retdata.msg = 'ok';
+									res.send(retdata, 200);
+								}
+							});	
+		                }  
+		            });	
+				}
+			});	
+		}
+	});
+}
+
 // Client request Drivers
 exports.requestDrivers = function(req, res) {
 

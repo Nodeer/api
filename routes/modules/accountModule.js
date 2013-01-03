@@ -853,7 +853,8 @@ AM.rating = function(id,like,usertype,callback)
     });
 }
 
-AM.findByDistance = function(Location, number, conditions, usertype, callback) 
+//maxDistance : 10/3963
+AM.findByDistance = function(Location, number, conditions, usertype, maxDistance,callback) 
 {
 	var tbAccounts = 'accounts';
 	if (usertype == 1) {
@@ -886,7 +887,7 @@ AM.findByDistance = function(Location, number, conditions, usertype, callback)
 	console.log("xxxxxx1=" + typeof(loc) + typeof(loc.loc));
 	console.log("xxxxxx2=" + JSON.stringify(loc.loc));
 	
-    db.command({geoNear: tbAccounts, near: loc.loc, distanceMultiplier: 3963, spherical: true, num: number, maxDistance : 10/3963,
+    db.command({geoNear: tbAccounts, near: loc.loc, distanceMultiplier: 3963, spherical: true, num: number, maxDistance : maxDistance,
     	query:{
 			$and:[
 					con
@@ -910,10 +911,11 @@ AM.listTokensbyFindByDistance = function(loc, number, conditions, usertype, call
     
     console.log('- Location: ' + loc);
     console.log('- number: ' + number);
-    console.log('- conditions: ' + conditions);
+    console.log('- conditions: ' + JSON.stringify(conditions));
     
     var retdata = {};
-    AM.findByDistance(loc,number,conditions,usertype,function(e, o) {
+    var maxDistance = 100000;
+    AM.findByDistance(loc,number,conditions,usertype,maxDistance,function(e, o) {
 		if (e) { 
 			console.log(e);
 			callback(e,null);
@@ -923,7 +925,11 @@ AM.listTokensbyFindByDistance = function(loc, number, conditions, usertype, call
 			//var tokens = getTokensFromGeoNear(o);
 			console.log('- output:' + JSON.stringify(o));
 			o.info = getInfoFromGeoNear(o);
-			callback(null,o);
+			if (o.info.devices.length == 0) {
+				callback("Drivers is not available",o);
+			} else {
+				callback(null,o);
+			}
 		}
 	});		
 }
