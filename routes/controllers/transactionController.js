@@ -162,7 +162,9 @@ exports.requestDrivers = function(req, res) {
 // Client cancel request
 exports.cancelRequestClient = function(req, res) {
 
-	var id = req.params.id;
+	debugger; // LOOK AT ME! I'm a breakpoint.
+
+	var clientID = req.params.id;
 	//var Location = req.body.loc;
     //var number = req.body.number;
     //var conditions = req.body.conditions;
@@ -174,10 +176,11 @@ exports.cancelRequestClient = function(req, res) {
     // console.log('- number: ' + number);
     // console.log('- conditions: ' + conditions);
     
+    //console.log('- 111111: ' + clientID);
     var retdata = {};
     var usertype = 0;
     var Status = aigoDefine.status['online'];
-    AM.findById(id,usertype,function(e, o) {
+    AM.findById(clientID,usertype,function(e, o) {
 		if (e) {
 			retdata.msg = e;
 			res.send(retdata, 400);
@@ -194,6 +197,73 @@ exports.cancelRequestClient = function(req, res) {
 					res.send(retdata, 200);
 				}
 			});
+		} else if (o.status == aigoDefine.status['accepted']) {
+
+			var driverID = o.transaction;
+			//console.log('- 22222: ' + driverID);
+
+			// --- cancelTransactionClient
+			var retdata = {};
+		    var usertype = 1;
+			AM.findById(driverID,usertype,function(e, o) {
+				if (e) {
+					retdata.msg = e;
+					res.send(retdata, 400);
+				}	else if (o.status == aigoDefine.status['accepted'] || o.status == aigoDefine.status['arrival']) {
+					var Status = aigoDefine.status['online'];
+					o.status = Status;
+					o.transaction = "";
+					AM.saveData(o,usertype,function(e, o) {
+					//AM.updateStatus(id,Status,usertype,function(e, o) {
+						if (e) {
+							retdata.msg = e;
+							res.send(retdata, 400);
+						} else {
+							var pushContents = {};
+							pushContents.alert = "Client cancel transaction";
+							pushContents.payload = {
+								'clientid':clientID,
+								'type':aigoDefine.notificationType['cancelTransaction'],
+							};
+							tokens = o.devices.iOS;
+							apns.push_Drivers(pushContents,tokens,function(e, o) {
+					            if (e) {
+					                retdata.msg = e;
+									res.send(retdata, 400);
+					            } else {
+					            	// update status for Client
+					            	var usertype = 0;
+									AM.findById(clientID,usertype,function(e, o) {
+										if (e) {
+											retdata.msg = e;
+											res.send(retdata, 400);
+										}	else {
+											var Status = aigoDefine.status['online'];
+											o.status = Status;
+											o.transaction = "";
+											AM.saveData(o,usertype,function(e, o) {
+												if (e) {
+									                retdata.msg = e;
+													res.send(retdata, 400);
+												} else {
+													retdata = o;
+													retdata.msg = 'ok';
+													res.send(retdata, 200);
+												}
+											});
+										}
+									});
+								}
+							});
+						}
+					});		
+				} else {
+					retdata.msg = "Driver is not available.";
+					res.send(retdata, 400);
+				}
+			});	
+
+
 		} else {
 			retdata.msg = "Can not cancel request";
 			res.send(retdata, 400);

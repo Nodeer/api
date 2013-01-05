@@ -156,7 +156,7 @@ new:
 		
 	16) Respond accept to client
 	 - Driver: 
-	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"clientid":"50d81382b951badb10000001"}' http://localhost:3001/transactions/driver/accept/50d83872e739b0dd1a000004
+	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"clientid":"50d81382b951badb10000001"}' http://localhost:3001/transactions/driver/accept/50e6894a64ca60cd3f000002
 
 	17) Driver cancel transaction:
 	 - Driver: 
@@ -164,12 +164,12 @@ new:
 
 	18) Client cancel transaction after driver accept:
 	 - Client: 
-		curl -i -X POST -H 'Content-Type: application/json' -d'{}' http://localhost:3001/transactions/client/transactions/client/cancelrequest/50d81382b951badb10000001
+	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"driverid":"50d83872e739b0dd1a000004"}' http://localhost:3001/transactions/client/canceltransaction/50d81382b951badb10000001
 
-	19) Client cancel requeset before driver accept:
+	19) Client cancel requeset before driver accept, if find driver accepted then send notification cancel transaction to driver:
 	 - Client:
-		curl -i -X POST -H 'Content-Type: application/json' -d'{"driverid":"50d83872e739b0dd1a000004"}' http://localhost:3001/transactions/client/canceltransaction/50d81382b951badb10000001
-
+	 	curl -i -X POST -H 'Content-Type: application/json' -d'{}' http://localhost:3001/transactions/client/transactions/client/cancelrequest/50d81382b951badb10000001
+		
 	20) Arrival notification
 	 - Driver: 
 	 	curl -i -X POST -H 'Content-Type: application/json' -d'{"clientid":"50d8182b951badb10000001"}' http://localhost:3001/transactions/driver/arrival/50d83872e739b0dd1a000004
