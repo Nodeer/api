@@ -162,31 +162,20 @@ exports.requestDrivers = function(req, res) {
 // Client cancel request
 exports.cancelRequestClient = function(req, res) {
 
-	debugger; // LOOK AT ME! I'm a breakpoint.
-
 	var clientID = req.params.id;
-	//var Location = req.body.loc;
-    //var number = req.body.number;
-    //var conditions = req.body.conditions;
-    
-   //  var number = 10;
-  	// var conditions = {"status":"1"};
-    
-    // console.log('- Location: ' + Location);
-    // console.log('- number: ' + number);
-    // console.log('- conditions: ' + conditions);
-    
-    //console.log('- 111111: ' + clientID);
     var retdata = {};
     var usertype = 0;
     var Status = aigoDefine.status['online'];
     AM.findById(clientID,usertype,function(e, o) {
+    	//console.log("client info" + JSON.stringify(o));
 		if (e) {
 			retdata.msg = e;
 			res.send(retdata, 400);
 		}	else if (o.status == aigoDefine.status['requesting']) {
+			usertype = 0;
 			o.status = Status;
 			o.transaction = "";
+			//console.log("client info xxxx=" + usertype + "=xxxxxxxxxxxxx" + JSON.stringify(o));
 			AM.saveData(o,usertype,function(e, o) {
 				if (e) {
 	                retdata.msg = e;
@@ -419,6 +408,7 @@ exports.acceptRequestDriver = function(req, res) {
     var retdata = {};
     var usertype = 0;
 	AM.findById(clientID,usertype,function(e, o) {
+		//console.log("client info" + JSON.stringify(o));
 		if (e) {
 			retdata.msg = e;
 			res.send(retdata, 400);

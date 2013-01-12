@@ -677,11 +677,15 @@ AM.freeUpdate = function(newData, usertype, callback)
 AM.saveData = function(newData, usertype, callback)
 {
 	var tbAccounts = AM.accounts;
+	console.log("saveData-usertype--------------" + usertype);
 	if (usertype == 1) {
+		console.log("saveData-drivers--------------");
 		tbAccounts = AM.drivers;
 	} else if (usertype == 0){
+		console.log("saveData-clients--------------");
 		tbAccounts = AM.clients;
 	}
+	//console.log("--------------" + JSON.stringify(newData));
 	tbAccounts.save(newData); callback(null,newData);
 }
 
