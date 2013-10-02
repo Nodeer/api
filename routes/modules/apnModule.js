@@ -5,12 +5,40 @@ var AM = require('../modules/accountModule');;
 var apns = require('apn');
 
 
+// var options_Driver = {
+//     cert: './routes/certificates/aigodriver-cert.pem',                 /* Certificate file path */
+//     certData: null,                   /* String or Buffer containing certificate data, if supplied uses this instead of cert file path */
+//     key:  './routes/certificates/aigotaxi-key.pem',                  /* Key file path */
+//     keyData: null,                    /* String or Buffer containing key data, as certData */
+//     passphrase: '',                 /* A passphrase for the Key file */
+//     ca: null,                         /* String or Buffer of CA data to use for the TLS connection */
+//     gateway: 'gateway.push.apple.com',/* gateway address */
+//     port: 2195,                       /* gateway port */
+//     enhanced: true,                   /* enable enhanced format */
+//     errorCallback: undefined,         /* Callback when error occurs function(err,notification) */
+//     cacheLength: 100                  /* Number of notifications to cache for error purposes */
+// };
+
+// var options_Client = {
+//     cert: './routes/certificates/aigouser-cert.pem',                 /* Certificate file path */
+//     certData: null,                   /* String or Buffer containing certificate data, if supplied uses this instead of cert file path */
+//     key:  './routes/certificates/aigotaxi-key.pem',                  /* Key file path */
+//     keyData: null,                    /* String or Buffer containing key data, as certData */
+//     passphrase: '',                 /* A passphrase for the Key file */
+//     ca: null,                         /* String or Buffer of CA data to use for the TLS connection */
+//     gateway: 'gateway.push.apple.com',/* gateway address */
+//     port: 2195,                       /* gateway port */
+//     enhanced: true,                   /* enable enhanced format */
+//     errorCallback: undefined,         /* Callback when error occurs function(err,notification) */
+//     cacheLength: 100                  /* Number of notifications to cache for error purposes */
+// };
+
 var options_Driver = {
-    cert: './routes/certificates/AIGO_Driver_Dev1_development.pem',                 /* Certificate file path */
+    cert: './routes/certificates/driver_aps_dev_cer.pem',                 /* Certificate file path */
     certData: null,                   /* String or Buffer containing certificate data, if supplied uses this instead of cert file path */
-    key:  './routes/certificates/AIGO_key.pem',                  /* Key file path */
+    key:  './routes/certificates/aigo_dev_key.pem',                  /* Key file path */
     keyData: null,                    /* String or Buffer containing key data, as certData */
-    passphrase: 'aigo@123',                 /* A passphrase for the Key file */
+    passphrase: '123456',                 /* A passphrase for the Key file */
     ca: null,                         /* String or Buffer of CA data to use for the TLS connection */
     gateway: 'gateway.sandbox.push.apple.com',/* gateway address */
     port: 2195,                       /* gateway port */
@@ -20,11 +48,11 @@ var options_Driver = {
 };
 
 var options_Client = {
-    cert: './routes/certificates/AIGO_Client_Dev1_development.pem',                 /* Certificate file path */
+    cert: './routes/certificates/user_aps_dev_cer.pem',                 /* Certificate file path */
     certData: null,                   /* String or Buffer containing certificate data, if supplied uses this instead of cert file path */
-    key:  './routes/certificates/AIGO_key.pem',                  /* Key file path */
+    key:  './routes/certificates/aigo_dev_key.pem',                  /* Key file path */
     keyData: null,                    /* String or Buffer containing key data, as certData */
-    passphrase: 'aigo@123',                 /* A passphrase for the Key file */
+    passphrase: '123456',                 /* A passphrase for the Key file */
     ca: null,                         /* String or Buffer of CA data to use for the TLS connection */
     gateway: 'gateway.sandbox.push.apple.com',/* gateway address */
     port: 2195,                       /* gateway port */
